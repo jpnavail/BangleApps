@@ -7,7 +7,7 @@
   "tags": "",
   "supports" : ["BANGLEJS2"],  
   "storage": [
-    {"name":"mamontre.apps.js","url":"mamontre.apps.js"},
-    {"name":"mamontre.apps-icon.js","url":"mamontre.apps-icon.js","evaluate":true}
+    {"name":"apps.js","url":"apps.js"},
+    {"name":"apps-icon.js","url":"apps-icon.js","evaluate":true}
   ]
 }
