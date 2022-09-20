@@ -1,6 +1,6 @@
 // Clock with large digits using the "Anton" bold font
 
-const SETTINGSFILE = "antonclk.json";
+const SETTINGSFILE = "jpnclk.json";
 
 Graphics.prototype.setFontAnton = function(scale) {
   // Actual height 69 (68 - 0)
