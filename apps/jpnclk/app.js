@@ -12,6 +12,7 @@ Graphics.prototype.setFontAntonSmall = function(scale) {
   g.setFontCustom(atob("AAAAAAAAAAAAAAAAAAAAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAf8AAAAAAAAAAAAAAAAAAAAMAAAAAAAAD8AAAAAAAA/8AAAAAAAf/8AAAAAAH//8AAAAAB///8AAAAA////8AAAAP////8AAAD/////8AAB//////8AAf//////8AH///////4A///////+AA///////AAA//////wAAA/////8AAAA////+AAAAA////gAAAAA///4AAAAAA//8AAAAAAA//AAAAAAAA/wAAAAAAAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/////wAAA//////8AAB//////+AAH///////gAH///////gAP///////wAf///////4Af///////4A////////8A////////8A////////8A//AAAAD/8A/8AAAAA/8A/8AAAAA/8A/8AAAAA/8A/+AAAAB/8A////////8A////////8A////////8Af///////4Af///////4AP///////wAP///////wAH///////gAD///////AAA//////8AAAP/////wAAAAAAAAAAAAAAAAAAAAAAAfwAAAAAAAA/4AAAAAAAA/4AAAAAAAB/wAAAAAAAB/wAAAAAAAD/wAAAAAAAD/gAAAAAAAH///////8AP///////8A////////8A////////8A////////8A////////8A////////8A////////8A////////8A////////8A////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/4AAAP8AA//4AAA/8AB//4AAH/8AH//4AAP/8AP//4AA//8AP//4AB//8Af//4AD//8Af//4AP//8A///4Af//8A///4A///8A///4D///8A//AAH///8A/8AAP///8A/8AA//+/8A/8AD//8/8A/+Af//w/8A//////g/8A/////+A/8A/////8A/8Af////4A/8Af////wA/8AP////AA/8AP///+AA/8AH///8AA/8AD///wAA/8AA///AAA/8AAP/4AAA/8AAAAAAAAAAAAAAAAAAAAAAH4AAf/gAAA/4AAf/8AAD/4AAf//AAH/4AAf//gAP/4AAf//wAP/4AAf//wAf/4AAf//4Af/4AAf//4A//4AAf//8A//4AAf//8A//4AAP//8A//A/8AB/8A/8A/8AA/8A/8B/8AA/8A/8B/8AA/8A/+D//AB/8A////////8A////////8A////////8Af///////4Af///////4Af///////wAP///////gAH//9////gAD//4///+AAB//wf//4AAAP/AH//gAAAAAAAAAAAAAAAAAAAAAAAAAAAH/wAAAAAAB//wAAAAAAP//wAAAAAD///wAAAAA////wAAAAH////wAAAB/////wAAAf/////wAAD//////wAA///////wAA/////h/wAA////wB/wAA///8AB/wAA///AAB/wAA//gAAB/wAA////////8A////////8A////////8A////////8A////////8A////////8A////////8A////////8A////////8A////////8A////////8AAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAAAAAAAAAAAAAAAAAAAAAP/4AA////4P/+AA////4P//AA////4P//gA////4P//wA////4P//wA////4P//4A////4P//4A////4P//8A////4P//8A////4P//8A/8H/AAB/8A/8H+AAA/8A/8P+AAA/8A/8P+AAA/8A/8P/gAD/8A/8P/////8A/8P/////8A/8P/////8A/8P/////4A/8H/////4A/8H/////wA/8D/////wA/8B/////gA/8A////+AA/8AP///4AAAAAB///AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////wAAAf/////8AAB///////AAH///////gAP///////wAP///////wAf///////4Af///////4A////////8A////////8A////////8A/+AH/AB/8A/8AP+AA/8A/4Af+AA/8A/8Af+AA/8A/8Af/gH/8A//4f////8A//4f////8A//4f////8Af/4f////4Af/4f////4AP/4P////wAP/4P////gAH/4H////AAD/4D///+AAB/4B///4AAAP4AP//gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/8AAAAAAAA/8AAAAAAAA/8AAAAAB8A/8AAAAB/8A/8AAAAf/8A/8AAAH//8A/8AAA///8A/8AAH///8A/8AA////8A/8AD////8A/8Af////8A/8B/////8A/8P/////8A/8//////8A////////AA///////AAA//////gAAA/////4AAAA/////AAAAA////4AAAAA////AAAAAA///8AAAAAA///gAAAAAA//+AAAAAAA//wAAAAAAA/+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/gD//gAAA//4P//8AAD//8f///AAH//+////gAH///////wAP///////4AP///////8Af///////8Af///////+Af///////+A////////+A//B//AB/+A/+A/+AA/+A/8Af+AA/+A/+Af+AA/+A//A//AB/+A////////+Af///////+Af///////+Af///////8Af///////8AP///////4AH///////4AH//+////wAD//+////AAA//4P//+AAAP/gH//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH//gAfgAAA///8A/8AAB///+A//AAH////A//gAH////g//wAP////g//wAf////w//4Af////w//4A/////w//8A/////w//8A/////w//8A//gP/wA/8A/8AD/wA/8A/8AD/wAf8A/8AD/gA/8A/+AH/AB/8A////////8A////////8A////////8Af///////4Af///////4Af///////wAP///////wAH///////gAD//////+AAA//////4AAAP/////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+AA/4AAAAP+AA/4AAAAP+AA/4AAAAP+AA/4AAAAP+AA/4AAAAP+AA/4AAAAP+AA/4AAAAP+AA/4AAAAP+AA/4AAAAP+AA/4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), 46, atob("DhgeFB4eHh4eHh4eDw=="), 60 + (scale << 8) + (1 << 16));
 };
 
+
 // variables defined from settings
 var secondsMode;
 var secondsColoured;
@@ -135,14 +136,15 @@ function draw() {
     .fillRect(0, g.getHeight() - 23, g.getWidth(), g.getHeight()).reset();
   /* */
   g.clearRect(0, 24, g.getWidth(), g.getHeight() - 24); // clear whole background (w/o widgets)
+  //
+  // --------- HEURE et MINUTE ------------------
+  //
   var date = new Date(); // Actually the current date, this one is shown
   var timeStr = require("locale").time(date, 1); // Hour and minute
-  // -------------------------
-  g.setColor(0,0,1);
+  g.setColor(0,0,1); //bleu
   y-=10;
   g.setFontAlign(0, 0).setFont("Anton").drawString(timeStr, x, y); // draw time
   // -------------------------------------------------------------------------
-  
   if (secondsScreen) {
     y += 65;
     var secStr = (secondsWithColon ? ":" : "") + ("0" + date.getSeconds()).slice(-2);
@@ -182,29 +184,34 @@ function draw() {
     }
   } else { // No seconds screen: Show date and optionally day of week
     y += (vectorFont ? 50 : (secondsMode !== "Never") ? 52 : 40);
+   //-----------------------------------------------
+    //   JOUR SEMAINE 
+    var jourSem = "";
+    jourSem = require("locale").dow(date, calWeek ? 1 : 0);
+    deb=jourSem.substring(0,1);
+    deb=deb.toUpperCase();
+    jourSem = deb+jourSem.substring(1,3);
+    // DATE MOIS 
     var dateStr = (dateOnMain === "ISO8601" ? isoStr(date) : require("locale").date(date, (dateOnMain === "Long" ? 0 : 1)));
     dateStr=dateStr.substring(0,dateStr.length-4);
-    if (upperCase)
-      dateStr = dateStr.toUpperCase();
+    var jourMois= "";
+    var blanc=1;
+    var mois ="";
+    jourMois=dateStr.substring(0,2);
+    blanc=dateStr.indexOf(" ");
+    mois=dateStr.substring(blanc,dateStr.length);
+    mois=mois.substring(0,4);
+    dateStr=jourSem+""+jourMois+mois.toUpperCase();
+    // ------------------
     g.setFontAlign(0, 0);
-    g.setColor(1,0,0);
-    g.setFont("12x20", 2);
+    //g.setColor(1,0,0); // Rouge
+    g.setFont("6x15",3);
+    //g.setfont("8x12",2);
+
     y+=15;
-    x+=5;
+    //x+=5;
     g.drawString(dateStr, x, y);
-    //-----------------------------------------------
-    if (calWeek || weekDay) {
-      var dowcwStr = "";
-      if (calWeek)
-        dowcwStr = " #" + ("0" + ISO8601calWeek(date)).slice(-2);
-      if (weekDay) 
-        dowcwStr = require("locale").dow(date, calWeek ? 1 : 0) + dowcwStr;  //weekDay e.g. Monday or weekDayShort #<calWeek> e.g. Mon #01
-      else //week #01
-        dowcwStr = /*LANG*/"week" + dowcwStr;
-      if (upperCase)
-      dowcwStr = dowcwStr.toUpperCase();
-      g.drawString(dowcwStr, x, y + (vectorFont ? 26 : 16));
-    }
+
   }
 
   // queue next draw
