@@ -201,7 +201,7 @@ function draw() {
     blanc=dateStr.indexOf(" ");
     mois=dateStr.substring(blanc,dateStr.length);
     mois=mois.substring(0,4);
-    dateStr=jourSem+""+jourMois+mois.toUpperCase();
+    dateStr=jourSem+" "+jourMois+mois.toUpperCase();
     // ------------------
     g.setFontAlign(0, 0);
     //g.setColor(1,0,0); // Rouge
