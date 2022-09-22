@@ -146,7 +146,7 @@ function draw() {
   //
   var date = new Date(); // Actually the current date, this one is shown
   var timeStr = require("locale").time(date, 1); // Hour and minute
-  g.setColor(0,0,1); //bleu
+  g.setColor(0,0,0); //bleu
   y-=10;
   g.setFontAlign(0, 0).setFont("Anton").drawString(timeStr, x, y); // draw time
   // -------------------------------------------------------------------------
