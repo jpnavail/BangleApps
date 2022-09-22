@@ -1,8 +1,8 @@
 {
   "id": "jpnclk",
   "name": "JPN Clock",
-  "version": "0.09",
-  "description": "A clock using the bold Anton font, optionally showing seconds and date in ISO-8601 format.",
+  "version": "0.03",
+  "description": "Réalisé par JP NAVAIL Sept 2022",
   "readme":"README.md",
   "icon": "app.png",
   "screenshots": [{"url":"screenshot.png"}],
