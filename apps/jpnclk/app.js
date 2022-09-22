@@ -1,3 +1,4 @@
+
 // Clock with large digits using the "Anton" bold font
 
 const SETTINGSFILE = "jpnclk.json";
@@ -208,17 +209,30 @@ function draw() {
     blanc=dateStr.indexOf(" ");
     mois=dateStr.substring(blanc,dateStr.length);
     mois=mois.substring(0,4);
-    dateStr=jourSem+" "+jourMois+mois.toUpperCase();
+    //dateStr=jourSem+" "+(jourMois+mois).toUpperCase();
     // ------------------
-    g.setFontAlign(0, 0);
+    //g.setFontAlign(0, 0);
     //g.setColor(1,0,0); // Rouge
     //g.setFont("6x15",3);
     //g.setFont("8x16",2);
-    g.setFont("8x12",3);
 
-    y+=15;
-    //x+=5;
+    y+=12;
+    //x=2;
+    dateStr=jourSem+"        ";
+    g.setFont("8x12",3);
     g.drawString(dateStr, x, y);
+    //
+    x+=43;
+    //y+=1;
+    dateStr=jourMois+"    ";
+    g.setFont('Vector',42);
+    g.drawString(dateStr,x,y);
+    //
+    x+=6;
+    y+=1;
+    dateStr=mois.toUpperCase();
+    g.setFont("8x12",3);
+    g.drawString(dateStr,x,y);
 
   }
 
