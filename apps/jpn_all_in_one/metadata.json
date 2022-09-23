@@ -1,5 +1,5 @@
 {
-  "id": "jpn_all_in_one",
+  "id": "jpngeneral",
   "name": "JPN GENERAL",
   "version": "0.01",
   "description": "Réalisé par JP NAVAIL Sept 2022",
@@ -10,8 +10,8 @@
   "supports": ["BANGLEJS","BANGLEJS2"],
   "allow_emulator": true,
   "storage": [
-    {"name":"jpn_all_in_one.app.js","url":"app.js"},
-    {"name":"jpn_all_in_one.img","url":"app-icon.js","evaluate":true}
+    {"name":"jpngeneral.app.js","url":"app.js"},
+    {"name":"jpngeneral.img","url":"app-icon.js","evaluate":true}
   ],
-  "data": [{"name":"jpn_all_in_one.json"}]
+  "data": [{"name":"jpngeneral.json"}]
 }
