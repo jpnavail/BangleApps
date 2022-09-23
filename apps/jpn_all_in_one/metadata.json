@@ -1,11 +1,12 @@
 {
   "id": "jpn_all_in_one",
   "name": "JPN GENERAL",
-  "version": "0.04",
+  "version": "0.01",
   "description": "Réalisé par JP NAVAIL Sept 2022",
   "icon": "app.png",
   "type": "clock",
   "tags": "clock",
+  "readme": "README.md",
   "supports": ["BANGLEJS","BANGLEJS2"],
   "allow_emulator": true,
   "storage": [
