@@ -1,0 +1,19 @@
+{
+  "id": "jpnclk",
+  "name": "JPN Clock",
+  "version": "0.03",
+  "description": "Réalisé par JP NAVAIL Sept 2022",
+  "readme":"README.md",
+  "icon": "app.png",
+  "screenshots": [{"url":"screenshot.png"}],
+  "type": "clock",
+  "tags": "clock",
+  "supports": ["BANGLEJS","BANGLEJS2"],
+  "allow_emulator": true,
+  "storage": [
+    {"name":"jpnclk.app.js","url":"app.js"},
+    {"name":"jpnclk.settings.js","url":"settings.js"},
+    {"name":"jpnclk.img","url":"app-icon.js","evaluate":true}
+  ],
+  "data": [{"name":"jpnclk.json"}]
+}
