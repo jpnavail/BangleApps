@@ -1,6 +1,6 @@
-//   -------   PROGRAMME PRINCIPAL
+///   -------   PROGRAMME PRINCIPAL
 //
-//require("Font8x12").add(Graphics);
+require("Font8x12").add(Graphics);
 //require("Font8x16").add(Graphics);
 //require("FontTeletext10x18Ascii").add(Graphics);
 //require("FontHaxorNarrow7x17").add(Graphics);
@@ -23,6 +23,9 @@ var counterInterval;
 var tp_time;
 var boutton;
 var attente;
+var x = g.getWidth() / 2;
+var y = g.getHeight() / 2;
+
 //-----------------------------------------------------------------------
 //                FONCTIONS UTILITAIRES
 //-----------------------------------------------------------------------
@@ -39,6 +42,7 @@ function Tsleep (attente) {
 
 function set_aff() {
   g.clear();
+  Bangle.drawWidgets();
   g.setFontAlign(0,0); // center font
   g.setFont("Vector",40); // vector font, 80px  
   return;
@@ -49,15 +53,70 @@ function set_aff() {
 //                AFFICHAGES 
 //-----------------------------------------------------------------------
 
-function aff_prim() {
+function aff_principal() {
+
   counter +=1;
   set_aff();
+  x = g.getWidth() / 2;
+  y = g.getHeight() / 2;
+
+  //
+  // --------- HEURE et MINUTE ------------------
+  //
   var date = new Date();
-	var current_time = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
-  x=88;y=100;
-  g.drawString(current_time,x,y);
+  var hh=date.getHours();
+  if (hh.length==1) { hh="0"+hh; }
+  var mm=date.getMinutes();
+ if (mm.length==1) { mm="0"+mm; }
+  g.setColor(0,0,0); // noir
+  y-=10;
+  g.setFontAlign(0, 0).setFont("Anton").drawString(hh+":"+mm, x, y); // draw time
+  
+  //-----------------------------------------------
+  //       JOUR MOIS 
+  //
+  var jourSem = "";
+  var calWeek = false;
+
+  jourSem = require("locale").dow(date, calWeek ? 1 : 0);
+  deb=jourSem.substring(0,1);
+  deb=deb.toUpperCase();
+  jourSem = deb+jourSem.substring(1,3);
+  // DATE MOIS 
+  var dateOnMain = "Long";
+  var dateStr = (dateOnMain === "ISO8601" ? isoStr(date) : require("locale").date(date, (dateOnMain === "Long" ? 0 : 1)));
+  dateStr=dateStr.substring(0,dateStr.length-4);
+  var jourMois= "";
+  var blanc=1;
+  var mois ="";
+  jourMois=dateStr.substring(0,2);
+  blanc=dateStr.indexOf(" ");
+  mois=dateStr.substring(blanc,dateStr.length);
+  mois=mois.substring(0,4);
+
+  //g.setColor(1,0,0); // Rouge
+  y+=50;
+  x+=4;
+  dateStr=jourSem+"        ";
+  g.setFont("8x12",3);
+  g.drawString(dateStr, x, y);
+  //
+  x+=43;
+  //y+=1;
+  dateStr=jourMois+"    ";
+  g.setFont("Vector",42);
+  g.drawString(dateStr,x,y);
+  //
+  x+=6;
+  y+=1;
+  dateStr=mois.toUpperCase();
+  g.setFont("8x12",3);
+  g.drawString(dateStr,x,y);
+
   return;
 }
+
+//-----------------------------------------------------------------------
 
 function aff_second() {
   boutton+=1;
@@ -70,6 +129,8 @@ function aff_second() {
   return;
 }
 
+//-----------------------------------------------------------------------
+
 function aff_tiers() {
   boutton+=1;
   set_aff(); 
@@ -77,6 +138,9 @@ function aff_tiers() {
 
   setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
   Tsleep(3000);
+   // Show launcher when middle button pressed
+  Bangle.setUI("clock");
+
   return;
 }
 
@@ -85,16 +149,26 @@ function aff_tiers() {
 //--------------------                -----------------------------------
 
 function general() {
-  aff_prim();
+
+  aff_principal();
 
   setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
 
   if (!counterInterval)
-    counterInterval = setInterval(aff_prim, 8000);
+    counterInterval = setInterval(aff_principal, 8000);
 
   return;
 }
+
 //--------------------     MAIN           -----------------------------------
 boutton=0;
 general ();
 
+// Register hooks for LCD on/off event and screen lock on/off event
+//Bangle.on('lcdPower', on => {   general(); });
+//Bangle.on('lock', on => { general(); });
+
+// Load widgets
+Bangle.loadWidgets();
+
+// end of file
