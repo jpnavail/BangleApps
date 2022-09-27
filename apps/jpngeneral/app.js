@@ -1,10 +1,6 @@
 ///   -------   PROGRAMME PRINCIPAL
 //
 require("Font8x12").add(Graphics);
-//require("Font8x16").add(Graphics);
-//require("FontTeletext10x18Ascii").add(Graphics);
-//require("FontHaxorNarrow7x17").add(Graphics);
-//require("Vector").add(Graphics);
 
 Graphics.prototype.setFontAnton = function(scale) {
   // Actual height 69 (68 - 0)
