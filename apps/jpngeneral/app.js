@@ -60,14 +60,20 @@ function aff_principal() {
   // --------- HEURE et MINUTE ------------------
   //
   var date = new Date();
+  
   var hh=date.getHours().toString();
   //if (hh.length==1) { hh="0"+hh; }
   //console.log(`longueur ${hh} ${hh.length}`);
+  var aff=hh+":";
+  
   var mm=date.getMinutes().toString();
-  if (mm.length==1) { mm=" "+mm; }
+  if (mm.length==1) { aff=aff+" "; }
+  //console.log(`longueur ${mm} ${mm.length}`);
+  aff=aff+mm;
+  
   g.setColor(0,0,0); // noir
   y-=10;
-  g.setFontAlign(0, 0).setFont("Anton").drawString(hh+":"+mm, x, y); // draw time
+  g.setFontAlign(0, 0).setFont("Anton").drawString(aff, x, y); // draw time
   
   //-----------------------------------------------
   //       JOUR MOIS 
@@ -82,14 +88,11 @@ function aff_principal() {
   // DATE MOIS 
   var dateOnMain = "Long";
   var dateStr = (dateOnMain === "ISO8601" ? isoStr(date) : require("locale").date(date, (dateOnMain === "Long" ? 0 : 1)));
-  dateStr=dateStr.substring(0,dateStr.length-4);
-  var jourMois= "";
-  var blanc=1;
-  var mois ="";
-  jourMois=dateStr.substring(0,2);
-  blanc=dateStr.indexOf(" ");
-  mois=dateStr.substring(blanc,dateStr.length);
-  mois=mois.substring(0,4);
+  // année 4 derniers 
+  // dateStr.substring(0,dateStr.length-4);
+  var jourMois= dateStr.substring(0,2);
+  var blanc=dateStr.indexOf(" ");
+  var mois =(dateStr.substring(blanc,dateStr.length)).substring(0,4);
 
   //g.setColor(1,0,0); // Rouge
   y+=50;
