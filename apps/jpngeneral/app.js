@@ -60,10 +60,11 @@ function aff_principal() {
   // --------- HEURE et MINUTE ------------------
   //
   var date = new Date();
-  var hh=date.getHours();
-  if (hh.length==1) { hh="0"+hh; }
-  var mm=date.getMinutes();
- if (mm.length==1) { mm="0"+mm; }
+  var hh=date.getHours().toString();
+  //if (hh.length==1) { hh="0"+hh; }
+  //console.log(`longueur ${hh} ${hh.length}`);
+  var mm=date.getMinutes().toString();
+  if (mm.length==1) { mm=" "+mm; }
   g.setColor(0,0,0); // noir
   y-=10;
   g.setFontAlign(0, 0).setFont("Anton").drawString(hh+":"+mm, x, y); // draw time
