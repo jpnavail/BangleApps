@@ -1,5 +1,3 @@
-///   -------   PROGRAMME PRINCIPAL
-//
 require("Font8x12").add(Graphics);
 
 Graphics.prototype.setFontAnton = function(scale) {
@@ -44,6 +42,23 @@ function set_aff() {
   return;
 }
 
+// historique des temperatures
+  var history = [];
+  var temperature;
+
+function acqui_temp (){ 
+
+  var temp = E.getTemperature();
+  // moyenne de 5 temperatures
+  while (history.length>4) history.shift();
+  history.push(temp);
+  temperature = E.sum(history) / history.length;
+  
+  temperature=temperature.toString();
+  var point=temperature.indexOf(".");
+  temperature = temperature.substring(0,point)+"°"+temperature.substring(point+1,point+2);
+  return; 
+}
 
 //-----------------------------------------------------------------------
 //                AFFICHAGES 
@@ -51,7 +66,7 @@ function set_aff() {
 
 function aff_principal() {
 
-  counter +=1;
+  acqui_temp ();
   set_aff();
   x = g.getWidth() / 2;
   y = g.getHeight() / 2;
@@ -119,13 +134,24 @@ function aff_principal() {
 //-----------------------------------------------------------------------
 
 function aff_second() {
+
   boutton+=1;
   set_aff();
+  
+  x=100; y=50;
+  
+  var batt=E.getBattery().toString()+ "%";
+  g.drawString(batt, x, y);
+  
+  y+=35;
+
+  g.drawString(temperature, x, y);
+
   g.drawString("2-CARO :"+ boutton,120,120);
 
   setWatch(aff_tiers,BTN1,{edge:"rising", debounce:30, repeat:true});
 
-  Tsleep(5000);
+  Tsleep(7000);
   return;
 }
 
