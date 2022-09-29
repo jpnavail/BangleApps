@@ -153,7 +153,7 @@ function aff_principal() {
   var mois =(dateStr.substring(blanc,dateStr.length)).substring(0,4);
 
   //g.setColor(1,0,0); // Rouge
-  y+=52;
+  y+=55;
   x+=4;
   
   dateStr=jourSem+"        ";
