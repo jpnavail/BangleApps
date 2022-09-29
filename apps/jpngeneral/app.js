@@ -194,7 +194,8 @@ function aff_principal() {
      i=0;
      while(i<4) { Bangle.buzz(500);Tsleep(500);Bangle.buzz(500); }
   }
-     
+  
+  setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});     
   return;
 }
 
@@ -218,7 +219,7 @@ function aff_second() {
 
   setWatch(aff_tiers,BTN1,{edge:"rising", debounce:30, repeat:true});
 
-  Tsleep(7000);
+  Tsleep(4000);
   
   return;
 }
@@ -326,18 +327,19 @@ function fullRedraw() {
 //-----------------------------------------------------------------------
 
 function aff_tiers() {
-  boutton+=1;
-  set_Aff(); 
-  g.drawString("3-FIN ! ",120,120);
 
-  setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
-  Tsleep(2000);
-   // Show launcher when middle button pressed
+  //set_Aff(); 
+  //g.drawString("3-FIN ! ",120,120);
+  //setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
+  //Tsleep(2000);
+
+  fullRedraw();   
+  Tsleep(4000);
+  
+  // Show launcher when middle button press
   Bangle.setUI("clock");
   
-  fullRedraw();
-  
-  Tsleep(5000);
+  Tsleep(1000);
   
   return;
 }
@@ -349,8 +351,6 @@ function aff_tiers() {
 function general() {
 
   aff_principal();
-
-  setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
 
   if (!counterInterval)
     counterInterval = setInterval(aff_principal, 30000);
