@@ -227,39 +227,34 @@ function zp(str) {
 }
 
 function drawEventHeader(event, y) {
+
   g.setFont("Vector", 24);
 
   var time = isActive(event) ? new Date() : new Date(event.timestamp * 1000);
   var timeStr = zp(time.getHours()) + ":" + zp(time.getMinutes());
-  //g.drawString(timeStr, 5, y);
+
   y += 26;
-  x=0;
- 
-  // g.setFont("12x20", 1);
+  x=5;
+  
   if (isActive(event)) {
-    //g.drawString(zp(time.getDate())+". " + require("locale").month(time,1),15*timeStr.length,y-21);
      g.drawString(zp(time.getDate())+"." + require("locale").month(time,1),x,y-21);
-     //g.drawString(timeStr, 50, y);
-    g.drawString(timeStr, 90, y-21);
+     g.drawString(timeStr, 100, y-21);
     
   } else {
     var offset = 0-time.getTimezoneOffset()/1440;
     var days = Math.floor((time.getTime()/1000)/86400+offset)-Math.floor(getTime()/86400+offset);
     if(days > 0) {
       g.setFont("Vector", 24);
-      
-      //var daysStr = days===1?/*LANG*/"tomorrow":/*LANG*/"in "+days+/*LANG*/" days";
       var daysStr = days===1?/*LANG*/"Demain":/*LANG*/"J+"+days;
-      //g.drawString(daysStr,15*timeStr.length,y-21);
       g.drawString(daysStr,x,y-21);
     }
-    g.drawString(timeStr, 90, y-21);
+    g.drawString(timeStr, 100, y-21);
   }
   return y;
 }
 
 function drawEventBody(event, y) {
-  //g.setFont("12x20", 1);
+
   g.setFont("Vector", 20);
   var lines = g.wrapString(event.title, g.getWidth()-10);
   if (lines.length > 2) {
@@ -317,18 +312,9 @@ function fullRedraw() {
   g.setFontAlign(-1, 0);
   g.clearRect(5,24,g.getWidth()-5,g.getHeight());
   updateCalendar();
-  var y = 30;
+  y = 30;
   y = drawCurrentEvents(y);
   drawFutureEvents(y);
-}
-
-function redraw() {
-  setaff();
-  if (current.find(e=>!isActive(e)) || next.find(isActive)) {
-    fullRedraw();
-  } else {
-    drawCurrentEvents(30);
-  }
 }
 
 //-----------------------------------------------------------------------
@@ -378,4 +364,3 @@ general ();
 Bangle.loadWidgets();
 
 // end of file
-
