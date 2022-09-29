@@ -163,7 +163,7 @@ function aff_principal() {
   x+=43;
   //y+=1;
   dateStr=jourMois+"    ";
-  g.setFont("Vector",42);
+  g.setFont("Vector",40);
   g.drawString(dateStr,x,y);
   //
   x+=6;
