@@ -38,14 +38,15 @@ function set_Aff() {
   g.clear();
   Bangle.drawWidgets();
   g.setFontAlign(0,0); // center font
-  g.setFont("Vector",40); // vector font, 80px  
+  g.setFont("Vector",40); // vector font, 80px 
+  g.setColor(0,0,0);
   return;
 }
 
 //--------------------------------------
 // historique des temperatures
-  var history = [];
-  var temperature;
+var history = [];
+var temperature;
 
 function acqui_temp (){ 
   var temp = E.getTemperature();
@@ -160,14 +161,14 @@ function aff_principal() {
   g.setFont("8x12",3);
   g.drawString(dateStr, x, y);
   //
-  x+=43;
-  //y+=1;
+  x+=40;
+  y+=1;
   dateStr=jourMois+"    ";
   g.setFont("Vector",40);
   g.drawString(dateStr,x,y);
   //
   x+=6;
-  y+=1;
+  y+=0;
   dateStr=mois.toUpperCase();
   g.setFont("8x12",3);
   g.drawString(dateStr,x,y);
@@ -207,11 +208,11 @@ function aff_second() {
   x=100; y=50;
   
   var batt=E.getBattery().toString()+ "%";
-  g.drawString(batt, x, y);
+  g.drawString("B:"+batt, x, y);
   
   y+=35;
 
-  g.drawString(temperature, x, y);
+  g.drawString("T:"+temperature, x, y);
 
   g.drawString("2-CARO :"+ boutton,120,120);
 
@@ -319,6 +320,7 @@ function fullRedraw() {
   y = 30;
   y = drawCurrentEvents(y);
   drawFutureEvents(y);
+  return;
 }
 
 //-----------------------------------------------------------------------
@@ -329,13 +331,13 @@ function aff_tiers() {
   g.drawString("3-FIN ! ",120,120);
 
   setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
-  Tsleep(3000);
+  Tsleep(2000);
    // Show launcher when middle button pressed
   Bangle.setUI("clock");
   
   fullRedraw();
   
-  Tsleep(7000);
+  Tsleep(5000);
   
   return;
 }
