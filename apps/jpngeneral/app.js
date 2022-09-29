@@ -12,7 +12,6 @@ Graphics.prototype.setFontAntonSmall = function(scale) {
 //-----------------------------------------------------------------------
 //                VARIABLES  GENERALES
 //-----------------------------------------------------------------------
-var counter = 5;
 var counterInterval;
 var tp_time;
 var boutton;
