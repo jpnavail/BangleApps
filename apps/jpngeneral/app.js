@@ -124,9 +124,14 @@ function aff_principal() {
   //console.log(`longueur ${mm} ${mm.length}`);
   aff=aff+mm;
   
-  g.setColor(0,0,0); // noir
+  //  rectangle 
+  g.setBgColor(1,0,0).setColor(1,1,1);
+  var statusRect = {x:5,y:28,w:165,h:78};
+  g.clearRect(statusRect);
+  
   y-=10;
   g.setFontAlign(0, 0).setFont("Anton").drawString(aff, x, y); // draw time
+  g.setColor(0,0,0); // noir
   
   //-----------------------------------------------
   //       JOUR MOIS 
