@@ -34,7 +34,8 @@ function Tsleep (attente) {
   return;
 }
 
-function set_aff() {
+//--------------------------------------
+function set_Aff() {
   g.clear();
   Bangle.drawWidgets();
   g.setFontAlign(0,0); // center font
@@ -42,12 +43,12 @@ function set_aff() {
   return;
 }
 
+//--------------------------------------
 // historique des temperatures
   var history = [];
   var temperature;
 
 function acqui_temp (){ 
-
   var temp = E.getTemperature();
   // moyenne de 5 temperatures
   while (history.length>4) history.shift();
@@ -60,6 +61,44 @@ function acqui_temp (){
   return; 
 }
 
+//--------------------------------------
+var calendar = [];
+var current = [];
+var next = [];
+var nb_heures;
+var nb_minutes;
+var titre;
+
+function updateCalendar() {
+  calendar = require("Storage").readJSON("android.calendar.json",true)||[];
+  calendar = calendar.filter(e => isActive(e) || getTime() <= e.timestamp);
+  calendar.sort((a,b) => a.timestamp - b.timestamp);
+
+  current = calendar.filter(isActive);
+  next = calendar.filter(e=>!isActive(e));
+}
+
+function isActive(event) {
+  var timeActive = getTime() - event.timestamp;
+  return timeActive >= 0 && timeActive <= event.durationInSeconds;
+}
+
+function timeToNext() {
+
+  if (next.length !=0) {
+     var inter=next[0].timestamp-getTime();
+     console.log(inter);
+     nb_heures=Math.floor(inter/3600);
+     nb_minutes =Math.floor((inter-3600*nb_heures)/60);
+     console.log(nb_heures, nb_minutes);
+     titre=next[0].title;
+  } else {
+    nb_heures=0; nb_minutes=0;titre="- Rien -";
+  }
+  
+}
+
+
 //-----------------------------------------------------------------------
 //                AFFICHAGES 
 //-----------------------------------------------------------------------
@@ -67,9 +106,9 @@ function acqui_temp (){
 function aff_principal() {
 
   acqui_temp ();
-  set_aff();
+  set_Aff();
   x = g.getWidth() / 2;
-  y = g.getHeight() / 2;
+  y = (g.getHeight() / 2) -5;
 
   //
   // --------- HEURE et MINUTE ------------------
@@ -82,7 +121,7 @@ function aff_principal() {
   var aff=hh+":";
   
   var mm=date.getMinutes().toString();
-  if (mm.length==1) { aff=aff+" "; }
+  if (mm.length==1) { aff=aff+"0"; }
   //console.log(`longueur ${mm} ${mm.length}`);
   aff=aff+mm;
   
@@ -110,8 +149,9 @@ function aff_principal() {
   var mois =(dateStr.substring(blanc,dateStr.length)).substring(0,4);
 
   //g.setColor(1,0,0); // Rouge
-  y+=50;
+  y+=52;
   x+=4;
+  
   dateStr=jourSem+"        ";
   g.setFont("8x12",3);
   g.drawString(dateStr, x, y);
@@ -127,7 +167,29 @@ function aff_principal() {
   dateStr=mois.toUpperCase();
   g.setFont("8x12",3);
   g.drawString(dateStr,x,y);
-
+  
+  //-----------------------------------------------
+  //   CALENDRIER 
+  updateCalendar();
+  timeToNext();
+  x=5;
+  y+=32;
+  calen=nb_heures+":"+nb_minutes+" "+titre;
+  g.setFont("Vector",20);
+  g.setFontAlign(-1, 0);
+  g.drawString(calen,x,y);
+  
+  if ((nb_heures==1) && (nb_minutes==0)) {
+     Bangle.buzz(1000);
+  }
+  if ((nb_heures==0) && (nb_minutes==30)) {
+     Bangle.buzz(2000); Tsleep(1000);Bangle.buzz(1000);
+  }
+    if ((nb_heures==0) && (nb_minutes==30)) {
+     i=0;
+     while(i<4) { Bangle.buzz(500);Tsleep(500);Bangle.buzz(500); }
+  }
+     
   return;
 }
 
@@ -136,7 +198,7 @@ function aff_principal() {
 function aff_second() {
 
   boutton+=1;
-  set_aff();
+  set_Aff();
   
   x=100; y=50;
   
@@ -152,21 +214,139 @@ function aff_second() {
   setWatch(aff_tiers,BTN1,{edge:"rising", debounce:30, repeat:true});
 
   Tsleep(7000);
+  
   return;
+}
+
+//-------------------------------------------------------
+//   PAGE CALENDRIER 
+
+
+function zp(str) {
+  return ("0"+str).substr(-2);
+}
+
+function drawEventHeader(event, y) {
+  g.setFont("Vector", 24);
+
+  var time = isActive(event) ? new Date() : new Date(event.timestamp * 1000);
+  var timeStr = zp(time.getHours()) + ":" + zp(time.getMinutes());
+  //g.drawString(timeStr, 5, y);
+  y += 26;
+  x=0;
+ 
+  // g.setFont("12x20", 1);
+  if (isActive(event)) {
+    //g.drawString(zp(time.getDate())+". " + require("locale").month(time,1),15*timeStr.length,y-21);
+     g.drawString(zp(time.getDate())+"." + require("locale").month(time,1),x,y-21);
+     //g.drawString(timeStr, 50, y);
+    g.drawString(timeStr, 90, y-21);
+    
+  } else {
+    var offset = 0-time.getTimezoneOffset()/1440;
+    var days = Math.floor((time.getTime()/1000)/86400+offset)-Math.floor(getTime()/86400+offset);
+    if(days > 0) {
+      g.setFont("Vector", 24);
+      
+      //var daysStr = days===1?/*LANG*/"tomorrow":/*LANG*/"in "+days+/*LANG*/" days";
+      var daysStr = days===1?/*LANG*/"Demain":/*LANG*/"J+"+days;
+      //g.drawString(daysStr,15*timeStr.length,y-21);
+      g.drawString(daysStr,x,y-21);
+    }
+    g.drawString(timeStr, 90, y-21);
+  }
+  return y;
+}
+
+function drawEventBody(event, y) {
+  //g.setFont("12x20", 1);
+  g.setFont("Vector", 20);
+  var lines = g.wrapString(event.title, g.getWidth()-10);
+  if (lines.length > 2) {
+    lines = lines.slice(0,2);
+    lines[1] = lines[1].slice(0,-3)+"...";
+  }
+  g.drawString(lines.join('\n'), 5, y);
+  y+=20 * lines.length;
+  if(event.location) {
+    g.drawImage(atob("DBSBAA8D/H/nDuB+B+B+B3Dn/j/B+A8A8AYAYAYAAAAAAA=="),5,y);
+    g.drawString(event.location, 20, y);
+    y+=20;
+  }
+  y+=5;
+  return y;
+}
+
+function drawEvent(event, y) {
+  y = drawEventHeader(event, y);
+  y = drawEventBody(event, y);
+  return y;
+}
+
+var curEventHeight = 0;
+
+function drawCurrentEvents(y) {
+  
+  g.setColor(0,0,1);
+  g.clearRect(5, y, g.getWidth() - 5, y + curEventHeight);
+  curEventHeight = y;
+
+  if(current.length === 0) {
+    y = drawEvent({timestamp: getTime(), durationInSeconds: 100}, y);
+  } else {
+    y = drawEventHeader(current[0], y);
+    for (var e of current) {
+      y = drawEventBody(e, y);
+    }
+  }
+  curEventHeight = y - curEventHeight;
+  return y;
+}
+
+function drawFutureEvents(y) {
+  g.setColor(g.theme.fg);
+  for (var e of next) {
+    y = drawEvent(e, y);
+    if(y>g.getHeight())break;
+  }
+  return y;
+}
+
+function fullRedraw() {
+  set_Aff();
+  g.setFontAlign(-1, 0);
+  g.clearRect(5,24,g.getWidth()-5,g.getHeight());
+  updateCalendar();
+  var y = 30;
+  y = drawCurrentEvents(y);
+  drawFutureEvents(y);
+}
+
+function redraw() {
+  setaff();
+  if (current.find(e=>!isActive(e)) || next.find(isActive)) {
+    fullRedraw();
+  } else {
+    drawCurrentEvents(30);
+  }
 }
 
 //-----------------------------------------------------------------------
 
 function aff_tiers() {
   boutton+=1;
-  set_aff(); 
+  set_Aff(); 
   g.drawString("3-FIN ! ",120,120);
 
   setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
   Tsleep(3000);
    // Show launcher when middle button pressed
   Bangle.setUI("clock");
-
+  
+  fullRedraw();
+  
+  Tsleep(7000);
+  
   return;
 }
 
@@ -181,7 +361,7 @@ function general() {
   setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
 
   if (!counterInterval)
-    counterInterval = setInterval(aff_principal, 8000);
+    counterInterval = setInterval(aff_principal, 30000);
 
   return;
 }
@@ -198,3 +378,4 @@ general ();
 Bangle.loadWidgets();
 
 // end of file
+
