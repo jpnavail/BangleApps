@@ -263,10 +263,8 @@ function aff_second() {
   g.setFontAlign(-1, 0);
   y=40; g.drawString("B:"+batt, x, y);
   y+=30;g.drawString(" T:"+temperature, x, y);
-  tend=pression-1013; 
-  console.log (tend);
+  tend=pression-1013; console.log (tend);
   y+=30;g.drawString("Prs:"+pression+" "+tend, x, y);
-  y+=30;g.drawString("Prs:"+pression+"  "+tend, x, y);
   y+=30;g.drawString(" Alt:"+altitude+" m", x, y);  
   
   Tsleep(5000);
