@@ -85,10 +85,7 @@ function suite_press(data) {
   history_P.push(press);
   pression = E.sum(history_P) / history_P.length;
   
-  pression=pression.toString();
-  point=pression.indexOf(".");
-  if (point==0) {point=pression.length;}
-  pression = pression.substring(0,point)+" P";
+  pression=parseInt(pression);
   console.log("Pression:", pression);
   
   // altitude : moyenne de 5 
@@ -96,10 +93,7 @@ function suite_press(data) {
   history_A.push(alti);
   altitude = E.sum(history_A) / history_A.length;
   
-  altitude=altitude.toString();
-  point=altitude.indexOf(".");
-  if (point==0) {point=altitude.length;}
-  altitude = altitude.substring(0,point)+" m";
+  altitude=parseInt(altitude);
   console.log("Altitude:",altitude);
 }
 
@@ -272,7 +266,7 @@ function aff_second() {
   if (pression-1013>=0){tend="Beau +"+pression-1013;}
   else {tend="Mauv "+pression-1013;}
   y+=30;g.drawString("Prs:"+pression+"  "+tend, x, y);
-  y+=30;g.drawString(" Alt:"+altitude, x, y);  
+  y+=30;g.drawString(" Alt:"+altitude+" m", x, y);  
   
   Tsleep(5000);
 }
