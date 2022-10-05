@@ -13,24 +13,26 @@ Graphics.prototype.setFontAntonSmall = function(scale) {
 //                VARIABLES  GENERALES
 //-----------------------------------------------------------------------
 var counterInterval;
-var tp_time;
-var boutton;
-var attente;
 var x = g.getWidth() / 2;
 var y = g.getHeight() / 2;
 
 //-----------------------------------------------------------------------
 //                FONCTIONS UTILITAIRES
 //-----------------------------------------------------------------------
-function Tsleep (attente) {
-  // temps en millisecondes
-  const start = Date.now();
-  //console.log('starting timer...');
-  setTimeout(() => {
-          const millis = Date.now() - start;
-          //console.log(`seconds elapsed = ${Math.floor(millis / 1000)}`);
-                    }, attente);
-  return;
+function Tsleep(ms) {
+  var debut;
+  var ok="0";
+  var maintenant;
+   
+  debut=Date.now();
+  while (ok=="0") {
+    if (boutton ==1 ) { ok="1"; boutton=0;}
+    else {
+       maintenant=Date.now();
+       if (maintenant-debut < ms ) {ok="0";}
+       else {ok="1"; }
+        }
+  }
 }
 
 //--------------------------------------
@@ -40,28 +42,69 @@ function set_Aff() {
   g.setFontAlign(0,0); // center font
   g.setFont("Vector",40); // vector font, 80px 
   g.setColor(0,0,0);
-  return;
 }
 
-//--------------------------------------
-// historique des temperatures
-var history = [];
-var temperature;
+//-------------------------------------------------------
+// temperatures pression, altitude 
+//
+var history_T = [];var history_P = [];var history_A = [];
+var temperature;var pression;var altitude;
+var data;
 
-function acqui_temp (){ 
-  var temp = E.getTemperature();
-  // moyenne de 5 temperatures
-  while (history.length>4) history.shift();
-  history.push(temp);
-  temperature = E.sum(history) / history.length;
+function acqui_press() { 
+  
+  Bangle.getPressure().then(data => { 
+        // console.log(data);
+        suite_press (data);
+        return;
+  });
+}
+ 
+//------------------------------
+function suite_press(data) {
+  var temp=data.temperature;
+  var press=data.pressure;
+  var alti=data.altitude;
+  //console.log("temp:",temp,"press:",press,"  alti:",alti);
+  
+    // moyenne de 5 temperatures
+  while (history_T.length>4) history_T.shift();
+  history_T.push(temp);
+  temperature = E.sum(history_T) / history_T.length;
   
   temperature=temperature.toString();
   var point=temperature.indexOf(".");
-  temperature = temperature.substring(0,point)+"°"+temperature.substring(point+1,point+2);
-  return; 
+  if (point==0) {
+        point=temperature.length;temperature = temperature.substring(0,point);}
+  else {
+        temperature = temperature.substring(0,point)+"°"+temperature.substring(point+1,point+2);}
+  console.log("Temp:",temperature);
+
+  // pression  : moyenne de 5 
+  while (history_P.length>4) history_P.shift();
+  history_P.push(press);
+  pression = E.sum(history_P) / history_P.length;
+  
+  pression=pression.toString();
+  point=pression.indexOf(".");
+  if (point==0) {point=pression.length;}
+  pression = pression.substring(0,point)+" P";
+  console.log("Pression:", pression);
+  
+  // altitude : moyenne de 5 
+  while (history_A.length>4) history_A.shift();
+  history_A.push(alti);
+  altitude = E.sum(history_A) / history_A.length;
+  
+  altitude=altitude.toString();
+  point=altitude.indexOf(".");
+  if (point==0) {point=altitude.length;}
+  altitude = altitude.substring(0,point)+" m";
+  console.log("Altitude:",altitude);
 }
 
-//--------------------------------------
+//------------------------------------------------------
+
 var calendar = [];
 var current = [];
 var next = [];
@@ -83,6 +126,7 @@ function isActive(event) {
   return timeActive >= 0 && timeActive <= event.durationInSeconds;
 }
 
+//------------------------------------------------------
 function timeToNext() {
 
   if (next.length !=0) {
@@ -93,20 +137,22 @@ function timeToNext() {
      console.log(nb_heures, nb_minutes);
      titre=next[0].title;
   } else {
-    nb_heures=0; nb_minutes=0;titre="- Rien -";
+    nb_heures=0; nb_minutes=0;
   }
   
 }
 
-
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------
 //                AFFICHAGES 
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------
+var altern=0;
 
 function aff_principal() {
 
-  acqui_temp ();
+  ecran=1;
+
   set_Aff();
+  acqui_press();
   x = g.getWidth() / 2;
   y = (g.getHeight() / 2) -5;
 
@@ -125,14 +171,22 @@ function aff_principal() {
   //console.log(`longueur ${mm} ${mm.length}`);
   aff=aff+mm;
   
-  //  rectangle 
-  g.setBgColor(1,0,0).setColor(1,1,1);
-  var statusRect = {x:5,y:28,w:165,h:78};
-  g.clearRect(statusRect);
+  console.log(altern);
   
-  y-=10;
+  //  rectangle 
+  if ( altern==0 ) {
+    g.setColor(1,0,0);
+    g.fillRect (2,28,172,103);
+    g.setColor(1,1,1);
+    altern=1;
+  } 
+  else {
+    if (altern==1) { g.setColor(0,0,1); altern=2; } 
+    else { g.setColor(1,0,0); altern=0; }
+  }
+
+  y-=11;
   g.setFontAlign(0, 0).setFont("Anton").drawString(aff, x, y); // draw time
-  g.setColor(0,0,0); // noir
   
   //-----------------------------------------------
   //       JOUR MOIS 
@@ -153,33 +207,34 @@ function aff_principal() {
   var blanc=dateStr.indexOf(" ");
   var mois =(dateStr.substring(blanc,dateStr.length)).substring(0,4);
 
-  //g.setColor(1,0,0); // Rouge
-  y+=55;
-  x+=4;
-  
+  g.setColor(0,0,0); // noir
+ 
+  x+=4; y+=55;
   dateStr=jourSem+"        ";
   g.setFont("8x12",3);
   g.drawString(dateStr, x, y);
   //
-  x+=40;
-  y+=1;
+  x+=40; y+=1;
   dateStr=jourMois+"    ";
   g.setFont("Vector",40);
   g.drawString(dateStr,x,y);
   //
-  x+=6;
-  y+=0;
+  x+=6; y+=0;
   dateStr=mois.toUpperCase();
   g.setFont("8x12",3);
   g.drawString(dateStr,x,y);
   
   //-----------------------------------------------
-  //   CALENDRIER 
+  //           CALENDRIER 
   updateCalendar();
   timeToNext();
-  x=5;
-  y+=32;
+  x=5; y+=32;
+  if (nb_heures!=0 || nb_minutes!=0 ) {
   calen=nb_heures+":"+nb_minutes+" "+titre;
+  } else {
+  calen= "sans éléments" ;
+  }
+    
   g.setFont("Vector",20);
   g.setFontAlign(-1, 0);
   g.drawString(calen,x,y);
@@ -192,40 +247,36 @@ function aff_principal() {
   }
     if ((nb_heures==0) && (nb_minutes==30)) {
      i=0;
-     while(i<4) { Bangle.buzz(500);Tsleep(500);Bangle.buzz(500); }
+     while(i<4) { Bangle.buzz(500);Tsleep(500); }
   }
   
-  setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});     
-  return;
 }
 
 //-----------------------------------------------------------------------
 
 function aff_second() {
-
-  boutton+=1;
-  set_Aff();
   
-  x=100; y=50;
+  set_Aff();
+  ecran=2;
+  console.log("affichage second");
+  g.setFont("Vector",24);
+  
+//  console.log(counterInterval);
+//  if (counterInterval!=undefined) {clearInterval(counterInterval);counterInterval=undefined;}
   
   var batt=E.getBattery().toString()+ "%";
-  g.drawString("B:"+batt, x, y);
   
-  y+=35;
-
-  g.drawString("T:"+temperature, x, y);
-
-  g.drawString("2-CARO :"+ boutton,120,120);
-
-  setWatch(aff_tiers,BTN1,{edge:"rising", debounce:30, repeat:true});
-
-  Tsleep(4000);
+  g.setFontAlign(-1, 0);
+  y=40; g.drawString("B:"+batt, x, y);
+  y+=30;g.drawString(" T:"+temperature, x, y);
+  y+=30;g.drawString("Prs:"+pression, x, y);
+  y+=30;g.drawString(" Alt:"+altitude, x, y);  
   
-  return;
+  Tsleep(5000);
 }
 
 //-------------------------------------------------------
-//   PAGE CALENDRIER 
+//          PAGE CALENDRIER 
 
 
 function zp(str) {
@@ -328,18 +379,15 @@ function fullRedraw() {
 
 function aff_tiers() {
 
-  //set_Aff(); 
-  //g.drawString("3-FIN ! ",120,120);
-  //setWatch(aff_second,BTN1,{edge:"rising", debounce:30, repeat:true});
-  //Tsleep(2000);
-
+  ecran=3;
+  console.log("affichage tiers");
   fullRedraw();   
   Tsleep(4000);
-  
+
   // Show launcher when middle button press
-  Bangle.setUI("clock");
+  // Bangle.setUI("clock");
   
-  Tsleep(1000);
+  Tsleep(3000);
   
   return;
 }
@@ -348,19 +396,35 @@ function aff_tiers() {
 //                         PRINCIPAL
 //--------------------                -----------------------------------
 
+function aiguillage (){
+  console.log("Boutton");
+  boutton=1;
+  if (ecran==1) { aff_second();}
+  else { if (ecran==2) { aff_tiers();} 
+         else { aff_principal();}
+        }
+}
+
+//------------------
 function general() {
 
   aff_principal();
 
   if (!counterInterval)
-    counterInterval = setInterval(aff_principal, 30000);
-
-  return;
+      counterInterval = setInterval(aff_principal, 30000);
+  
 }
 
 //--------------------     MAIN           -----------------------------------
-boutton=0;
+
+Bangle.setBarometerPower(true);
+//setTimeout(general,5000);
+
+setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
+
+acqui_press();
 general ();
+
 
 // Register hooks for LCD on/off event and screen lock on/off event
 //Bangle.on('lcdPower', on => {   general(); });
