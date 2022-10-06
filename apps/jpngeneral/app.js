@@ -35,6 +35,37 @@ function Tsleep(ms) {
   }
 }
 
+function Tsleep_Led(ms,led,etat) {
+  var change=0;
+  var debut;
+  var ok="0";
+  var maintenant;
+   
+  debut=Date.now();
+  while (ok=="0") {
+    
+     // TEST FIN
+     if (boutton ==1 ) { ok="1"; boutton=0;}
+     else {
+           maintenant=Date.now();
+           if (maintenant-debut < ms ) {ok="0";}
+           else {ok="1"; }
+     }
+    // BOUCLE     
+    if (change==0) {
+        if (led==1) {LED1.write(1);}
+        else { LED2.write(1);}
+        if (etat==1) {change=1;}
+    }
+    else {
+        if (led==1) {LED1.write(0);}
+        else { LED2.write(0);}
+        change=0;
+    Tsleep(500);
+    }
+  }
+}
+  
 //--------------------------------------
 function set_Aff() {
   g.clear();
@@ -63,14 +94,18 @@ function acqui_press() {
 //------------------------------
 function suite_press(data) {
   var temp=data.temperature;
+  var rect_temp=-3.5;
   var press=data.pressure;
+  var rect_press=0;
   var alti=data.altitude;
+  var rect_alti=141;
   //console.log("temp:",temp,"press:",press,"  alti:",alti);
   
     // moyenne de 5 temperatures
   while (history_T.length>4) history_T.shift();
   history_T.push(temp);
   temperature = E.sum(history_T) / history_T.length;
+  temperature +=rect_temp;
   
   temperature=temperature.toString();
   var point=temperature.indexOf(".");
@@ -84,14 +119,16 @@ function suite_press(data) {
   while (history_P.length>4) history_P.shift();
   history_P.push(press);
   pression = E.sum(history_P) / history_P.length;
+  pression +=rect_press;
   
-  pression=parseInt(pression);
+  pression=parseInt(pression)+0;
   console.log("Pression:", pression);
   
   // altitude : moyenne de 5 
   while (history_A.length>4) history_A.shift();
   history_A.push(alti);
   altitude = E.sum(history_A) / history_A.length;
+  altitude +=rect_alti;
   
   altitude=parseInt(altitude);
   console.log("Altitude:",altitude);
@@ -102,6 +139,7 @@ function suite_press(data) {
 var calendar = [];
 var current = [];
 var next = [];
+var event =[];
 var nb_heures;
 var nb_minutes;
 var titre;
@@ -120,15 +158,23 @@ function isActive(event) {
   return timeActive >= 0 && timeActive <= event.durationInSeconds;
 }
 
-//------------------------------------------------------
+function zp(str) {
+  return ("0"+str).substr(-2);
+}
+
 function timeToNext() {
 
   if (next.length !=0) {
-     var inter=next[0].timestamp-getTime();
-     console.log(inter);
-     nb_heures=Math.floor(inter/3600);
-     nb_minutes =Math.floor((inter-3600*nb_heures)/60);
-     console.log(nb_heures, nb_minutes);
+     //var inter=next[0].timestamp-getTime();
+     //console.log(inter);
+     //nb_heures=Math.floor(inter/3600);
+     //nb_minutes =Math.floor((inter-3600*nb_heures)/60);
+     //console.log(nb_heures, nb_minutes);
+     var tempo=new Date(next[0].timestamp*1000);
+     //console.log(tempo); 
+     //console.log(tempo.getHours().toString());
+     nb_heures= zp(tempo.getHours());
+     nb_minutes=zp(tempo.getMinutes());
      titre=next[0].title;
   } else {
     nb_heures=0; nb_minutes=0;
@@ -146,37 +192,44 @@ function aff_principal() {
   ecran=1;
 
   set_Aff();
-  acqui_press();
   x = g.getWidth() / 2;
   y = (g.getHeight() / 2) -5;
 
   //
   // --------- HEURE et MINUTE ------------------
   //
-  var date = new Date();
-  
-  var hh=date.getHours().toString();
+  var hh=new Date().getHours().toString();
   //if (hh.length==1) { hh="0"+hh; }
   //console.log(`longueur ${hh} ${hh.length}`);
   var aff=hh+":";
   
-  var mm=date.getMinutes().toString();
+  var mm=new Date().getMinutes().toString();
   if (mm.length==1) { aff=aff+"0"; }
   //console.log(`longueur ${mm} ${mm.length}`);
   aff=aff+mm;
   
   console.log(altern);
   
-  //  rectangle 
+  //  rectangle rouge/blanc 
   if ( altern==0 ) {
     g.setColor(1,0,0);
-    g.fillRect (2,28,172,103);
+    g.fillRect (2,28,172,108);
     g.setColor(1,1,1);
     altern=1;
   } 
   else {
+    // Blanc bleu
     if (altern==1) { g.setColor(0,0,1); altern=2; } 
-    else { g.setColor(1,0,0); altern=0; }
+    else { 
+          // blanc/rouge 
+          if (altern==2) { g.setColor(1,0,0); altern=3; }
+          else { // noir bleu clair
+                g.setColor(0,0,0);
+                g.fillRect (2,28,172,108);
+                g.setColor('#00F0FF');
+                altern=0;
+          }
+    }
   }
 
   y-=11;
@@ -188,14 +241,14 @@ function aff_principal() {
   var jourSem = "";
   var calWeek = false;
 
-  jourSem = require("locale").dow(date, calWeek ? 1 : 0);
+  jourSem = require("locale").dow(Date(), calWeek ? 1 : 0);
   deb=jourSem.substring(0,1);
   deb=deb.toUpperCase();
   jourSem = deb+jourSem.substring(1,3);
   // DATE MOIS 
   var dateOnMain = "Long";
-  var dateStr = (dateOnMain === "ISO8601" ? isoStr(date) : require("locale").date(date, (dateOnMain === "Long" ? 0 : 1)));
-  // année 4 derniers 
+  var dateStr = (dateOnMain === "ISO8601" ? isoStr(Date()) : require("locale").date(Date(), (dateOnMain === "Long" ? 0 : 1)));
+  // annee 4 derniers 
   // dateStr.substring(0,dateStr.length-4);
   var jourMois= dateStr.substring(0,2);
   var blanc=dateStr.indexOf(" ");
@@ -226,7 +279,7 @@ function aff_principal() {
   if (nb_heures!=0 || nb_minutes!=0 ) {
   calen=nb_heures+":"+nb_minutes+" "+titre;
   } else {
-  calen= "sans éléments" ;
+  calen= "sans elements" ;
   }
     
   g.setFont("Vector",20);
@@ -244,14 +297,17 @@ function aff_principal() {
      while(i<4) { Bangle.buzz(500);Tsleep(500); }
   }
   
+  acqui_press();
+  
 }
 
 //-----------------------------------------------------------------------
 
 function aff_second() {
   
-  set_Aff();
   ecran=2;
+  set_Aff();
+
   console.log("affichage second");
   g.setFont("Vector",24);
   
@@ -263,70 +319,74 @@ function aff_second() {
   g.setFontAlign(-1, 0);
   y=40; g.drawString("B:"+batt, x, y);
   y+=30;g.drawString(" T:"+temperature, x, y);
-  tend=pression-1013; console.log (tend);
+  if (pression-1013>=0){tend="Beau +"+pression-1013;}
+  else {tend="Mauv "+pression-1013;}
+  tend=pression-1013;
+  console.log (tend);
   y+=30;g.drawString("Prs:"+pression+" "+tend, x, y);
   y+=30;g.drawString(" Alt:"+altitude+" m", x, y);  
   
-  Tsleep(5000);
+  Tsleep_Led (5000,1,1);
 }
 
 //-------------------------------------------------------
 //          PAGE CALENDRIER 
 
-
-function zp(str) {
-  return ("0"+str).substr(-2);
+function fait_titre(titre) {
+  if (titre!="") {
+      if (titre.length>10) { 
+          titre=titre.substring(0,10);
+          console.log(titre,titre.length);
+      }
+  }
+  return titre;
 }
+
+var Haut=24;
+var inter=0;
 
 function drawEventHeader(event, y) {
 
-  g.setFont("Vector", 24);
+  g.setFont("Vector", Haut);
 
   var time = isActive(event) ? new Date() : new Date(event.timestamp * 1000);
   var timeStr = zp(time.getHours()) + ":" + zp(time.getMinutes());
 
-  y += 26;
-  x=5;
+  y += 0; x=5;
   
   if (isActive(event)) {
-     g.drawString(zp(time.getDate())+"." + require("locale").month(time,1),x,y-21);
-     g.drawString(timeStr, 100, y-21);
-    
+     g.drawString(zp(time.getDate())+"." + require("locale").month(time,1),x,y);
   } else {
     var offset = 0-time.getTimezoneOffset()/1440;
     var days = Math.floor((time.getTime()/1000)/86400+offset)-Math.floor(getTime()/86400+offset);
     if(days > 0) {
-      g.setFont("Vector", 24);
+      //g.setFont("Vector", 24);
       var daysStr = days===1?/*LANG*/"Demain":/*LANG*/"J+"+days;
-      g.drawString(daysStr,x,y-21);
+      g.drawString(daysStr,x,y);
     }
-    g.drawString(timeStr, 100, y-21);
-  }
+ }
+  g.drawString(timeStr, 100, y);  
+  y+=Haut+inter;
   return y;
 }
 
-function drawEventBody(event, y) {
+function drawEventBody(titre,y) {
 
-  g.setFont("Vector", 20);
-  var lines = g.wrapString(event.title, g.getWidth()-10);
-  if (lines.length > 2) {
-    lines = lines.slice(0,2);
-    lines[1] = lines[1].slice(0,-3)+"...";
-  }
-  g.drawString(lines.join('\n'), 5, y);
-  y+=20 * lines.length;
-  if(event.location) {
-    g.drawImage(atob("DBSBAA8D/H/nDuB+B+B+B3Dn/j/B+A8A8AYAYAYAAAAAAA=="),5,y);
-    g.drawString(event.location, 20, y);
-    y+=20;
-  }
-  y+=5;
+  //console.log(titre,titre.length);
+  x=3;
+  g.setFont("Vector", Haut);
+  if (titre != "") {
+      g.drawString(titre, x, y);
+      y+=Haut+inter;}
   return y;
 }
 
-function drawEvent(event, y) {
+function drawEvent(event,titre,y) {
+  //console.log(" y deb ",y);
   y = drawEventHeader(event, y);
-  y = drawEventBody(event, y);
+  //console.log(" y H",y);
+  y = drawEventBody(titre, y);
+  //console.log(" y B ",y);
   return y;
 }
 
@@ -337,13 +397,17 @@ function drawCurrentEvents(y) {
   g.setColor(0,0,1);
   g.clearRect(5, y, g.getWidth() - 5, y + curEventHeight);
   curEventHeight = y;
-
+  //console.log("y",y); 
   if(current.length === 0) {
-    y = drawEvent({timestamp: getTime(), durationInSeconds: 100}, y);
+    titre="";titre=fait_titre(titre);
+    console.log("première ligne");
+    y = drawEvent({timestamp: getTime(), durationInSeconds: 100},titre, y);
   } else {
     y = drawEventHeader(current[0], y);
-    for (var e of current) {
-      y = drawEventBody(e, y);
+    for (event of current) {
+      console.log("current");
+      titre=event.title;titre=fait_titre(titre);
+      y = drawEventBody(titre, y);
     }
   }
   curEventHeight = y - curEventHeight;
@@ -352,40 +416,31 @@ function drawCurrentEvents(y) {
 
 function drawFutureEvents(y) {
   g.setColor(g.theme.fg);
-  for (var e of next) {
-    y = drawEvent(e, y);
+  for (event of next) {
+    console.log("futur");
+    titre=event.title;titre=fait_titre(titre);
+    y = drawEvent(event,titre,y);
     if(y>g.getHeight())break;
   }
   return y;
 }
 
-function fullRedraw() {
+//-----------------------------------------------------------------------
+function aff_agenda() {
+  ecran=3;
+  console.log ("troisieme ecran");
   set_Aff();
+  
   g.setFontAlign(-1, 0);
   g.clearRect(5,24,g.getWidth()-5,g.getHeight());
   updateCalendar();
   y = 30;
   y = drawCurrentEvents(y);
   drawFutureEvents(y);
-  return;
+  
+  Tsleep_Led (5000,2,1);
 }
 
-//-----------------------------------------------------------------------
-
-function aff_tiers() {
-
-  ecran=3;
-  console.log("affichage tiers");
-  fullRedraw();   
-  Tsleep(4000);
-
-  // Show launcher when middle button press
-  // Bangle.setUI("clock");
-  
-  Tsleep(3000);
-  
-  return;
-}
 
 //-----------------------------------------------------------------------
 //                         PRINCIPAL
@@ -393,10 +448,13 @@ function aff_tiers() {
 
 function aiguillage (){
   console.log("Boutton");
+  // Pour arreter Tsleep 
   boutton=1;
+
   if (ecran==1) { aff_second();}
-  else { if (ecran==2) { aff_tiers();} 
-         else { aff_principal();}
+  else { if (ecran==2) { aff_agenda();} 
+         else { // Show launcher when middle button press
+                Bangle.setUI("clock"); }
         }
 }
 
@@ -413,7 +471,7 @@ function general() {
 //--------------------     MAIN           -----------------------------------
 
 Bangle.setBarometerPower(true);
-//setTimeout(general,5000);
+setTimeout(general,3000);
 
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
 
