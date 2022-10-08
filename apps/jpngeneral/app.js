@@ -434,7 +434,7 @@ function aff_agenda() {
   g.setFontAlign(-1, 0);
   g.clearRect(5,24,g.getWidth()-5,g.getHeight());
   updateCalendar();
-  y = 30;
+  y = 33;
   y = drawCurrentEvents(y);
   drawFutureEvents(y);
   
@@ -464,7 +464,7 @@ function general() {
   aff_principal();
 
   if (!counterInterval)
-      counterInterval = setInterval(aff_principal, 30000);
+      counterInterval = setInterval(aff_principal, 60000);
   
 }
 
