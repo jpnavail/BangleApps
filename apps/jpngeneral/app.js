@@ -94,11 +94,11 @@ function acqui_press() {
 //------------------------------
 function suite_press(data) {
   var temp=data.temperature;
-  var rect_temp=-3.5;
+  var rect_temp=-6.5;
   var press=data.pressure;
   var rect_press=0;
   var alti=data.altitude;
-  var rect_alti=141;
+  var rect_alti=62;
   //console.log("temp:",temp,"press:",press,"  alti:",alti);
   
     // moyenne de 5 temperatures
