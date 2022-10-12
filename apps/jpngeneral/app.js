@@ -23,36 +23,24 @@ var fic; var T; var lit_img=0; var fic_img=["mote2","mote1","mote3","moto1","mot
 //-----------------------------------------------------------------------
 function Tsleep(ms) { var ok="0"; var debut=Date.now();
   
-  while (ok=="0") { 
-    if (boutton ==1 ) { ok="1"; boutton=0;}
-    else { if Date.now();-debut < ms ) {ok="0";}
-           else {ok="1"; }
-        }
+  while (ok=="0") {  
+    if (boutton ==1 ) { ok="1"; boutton=0;} else { if Date.now();-debut < ms ) {ok="0";} else {ok="1"; } }
   }
 }
 
-function Tsleep_Led(ms,led,etat) {   var change=0; var ok="0";
-   
-  var debut=Date.now();
+function Tsleep_Led(ms,led,etat) {   var change=0; var ok="0"; var debut=Date.now();
+ 
   while (ok=="0") {
     
      // TEST FIN
      if (boutton ==1 ) { ok="1"; boutton=0;}
-     else {
-           if (Date.now() < ms ) {ok="0";}
-           else {ok="1"; }
-     }
+     else { if (Date.now() < ms ) {ok="0";} else {ok="1"; }  }
+    
     // BOUCLE + LED    
-    if (change==0) { if (etat==1) {change=1;}
-        if (led==1) {LED1.write(1);}
-        else { LED2.write(1);}
-    }
-    else { change=0;
-        if (led==1) {LED1.write(0);}
-        else { LED2.write(0);}
+    if (change==0) { if (etat==1) {  change=1; if (led==1) {LED1.write(1);} else { LED2.write(1);}  }}
+    else { change=0; if (led==1) {LED1.write(0);} else { LED2.write(0);} }
 
     Tsleep(500);
-    }
   }
 }
   
@@ -60,8 +48,7 @@ function Tsleep_Led(ms,led,etat) {   var change=0; var ok="0";
 //-------FCT -AFFICHAGES ----------------
 function set_Aff() { g.clear(reset); Bangle.drawWidgets(); g.setFontAlign(0,0); g.setFont("Vector",40); g.setColor(0,0,0); }
 
-function lit _fic (i) {
-   fic=fic_img[i]+".raw"; console.log(fic,"Lecture");    img=require("Storage").read(fic); console.log(img.length); }
+function lit _fic (i) { fic=fic_img[i]+".raw"; console.log(fic,"Lecture"); img=require("Storage").read(fic); console.log(img.length); }
 
 function D_ecran(img,x,y,T) { g.clear(); g.drawImage(atob(img), x, y, { scale: T }); }
 
@@ -75,67 +62,43 @@ var history_T = [];var history_P = [];var history_A = [];
 var temperature;var pression;var altitude;
 var data;
 
-function acqui_press() { 
-  
-  Bangle.getPressure().then(data => { 
-        // console.log(data);
-        suite_press (data);
-        return;
-  });
-}
+function acqui_press() { Bangle.getPressure().then(data => { suite_press (data); });}
  
 //------------------------------
 function suite_press(data) {
-  var temp=data.temperature;
-  var rect_temp=-6.5;
-  var press=data.pressure;
-  var rect_press=0;
-  var alti=data.altitude;
-  var rect_alti=62;
-  //console.log("temp:",temp,"press:",press,"  alti:",alti);
+  var temp=data.temperature; var rect_temp=-6.5;
+  var press=data.pressure;  var rect_press=0;
+  var alti=data.altitude; var rect_alti=62;
   
-    // moyenne de 5 temperatures
+  // moyenne de 5 temperatures
   while (history_T.length>4) history_T.shift();
-  history_T.push(temp);
-  temperature = E.sum(history_T) / history_T.length;
-  temperature +=rect_temp;
+  history_T.push(temp); temperature = E.sum(history_T) / history_T.length; temperature +=rect_temp;
   
   temperature=temperature.toString();
   var point=temperature.indexOf(".");
-  if (point==0) {
-        point=temperature.length;temperature = temperature.substring(0,point);}
-  else {
-        temperature = temperature.substring(0,point)+"�"+temperature.substring(point+1,point+2);}
-  console.log("Temp:",temperature);
+  if (point==0) { point=temperature.length;temperature = temperature.substring(0,point);}
+  else { temperature = temperature.substring(0,point)+"�"+temperature.substring(point+1,point+2);}
+  //console.log("Temp:",temperature);
 
   // pression  : moyenne de 5 
   while (history_P.length>4) history_P.shift();
-  history_P.push(press);
-  pression = E.sum(history_P) / history_P.length;
-  pression +=rect_press;
+  history_P.push(press); pression = E.sum(history_P) / history_P.length; pression +=rect_press;
   
   pression=parseInt(pression)+0;
-  console.log("Pression:", pression);
+  //console.log("Pression:", pression);
   
   // altitude : moyenne de 5 
   while (history_A.length>4) history_A.shift();
-  history_A.push(alti);
-  altitude = E.sum(history_A) / history_A.length;
-  altitude +=rect_alti;
+  history_A.push(alti);  altitude = E.sum(history_A) / history_A.length; altitude +=rect_alti;
   
-  altitude=parseInt(altitude);
-  console.log("Altitude:",altitude);
+  altitude=parseInt(altitude)+0;
+  //console.log("Altitude:",altitude);
 }
 
 //------------------------------------------------------
 
-var calendar = [];
-var current = [];
-var next = [];
-var event =[];
-var nb_heures;
-var nb_minutes;
-var titre;
+var calendar = []; var current = []; var next = []; var event =[]; var titre;
+var nb_heures; var nb_minutes;
 
 function updateCalendar() {
   calendar = require("Storage").readJSON("android.calendar.json",true)||[];
@@ -156,23 +119,11 @@ function zp(str) {
 }
 
 function timeToNext() {
-
   if (next.length !=0) {
-     //var inter=next[0].timestamp-getTime();
-     //console.log(inter);
-     //nb_heures=Math.floor(inter/3600);
-     //nb_minutes =Math.floor((inter-3600*nb_heures)/60);
-     //console.log(nb_heures, nb_minutes);
-     var tempo=new Date(next[0].timestamp*1000);
-     //console.log(tempo); 
-     //console.log(tempo.getHours().toString());
-     nb_heures= zp(tempo.getHours());
-     nb_minutes=zp(tempo.getMinutes());
-     titre=next[0].title;
-  } else {
-    nb_heures=0; nb_minutes=0;
-  }
-  
+     //var inter=next[0].timestamp-getTime();nb_heures=Math.floor(inter/3600);nb_minutes =Math.floor((inter-3600*nb_heures)/60);
+     var tempo=new Date(next[0].timestamp*1000); nb_heures= zp(tempo.getHours()); nb_minutes=zp(tempo.getMinutes()); titre=next[0].title;
+  } 
+  else { nb_heures=0; nb_minutes=0; }  
 }
 
 //-------------------------------------------------------------------------------------------
@@ -180,154 +131,77 @@ function timeToNext() {
 //-------------------------------------------------------------------------------------------
 var altern=0;
 
-function aff_principal() {
-
-  ecran=1;
-
-  set_Aff();
-  x = g.getWidth() / 2;
-  y = (g.getHeight() / 2) -5;
+function aff_principal() { ecran=1; set_Aff();
 
   //
   // --------- HEURE et MINUTE ------------------
   //
-  var hh=new Date().getHours().toString();
-  //if (hh.length==1) { hh="0"+hh; }
-  //console.log(`longueur ${hh} ${hh.length}`);
-  var aff=hh+":";
-  
-  var mm=new Date().getMinutes().toString();
-  if (mm.length==1) { aff=aff+"0"; }
-  //console.log(`longueur ${mm} ${mm.length}`);
-  aff=aff+mm;
-  
-  console.log(altern);
+  var hh=new Date().getHours().toString(); var aff=hh+":";
+  var mm=new Date().getMinutes().toString(); if (mm.length==1) { aff=aff+"0"; } aff=aff+mm;
   
   //  rectangle rouge/blanc 
-  if ( altern==0 ) {
-    g.setColor(1,0,0);
-    g.fillRect (2,28,172,108);
-    g.setColor(1,1,1);
-    altern=1;
-  } 
-  else {
-    // Blanc bleu
+  if ( altern==0 ) { g.setColor(1,0,0); g.fillRect (2,28,172,108); g.setColor(1,1,1); altern=1; } 
+  else { // Blanc bleu
     if (altern==1) { g.setColor(0,0,1); altern=2; } 
-    else { 
-          // blanc/rouge 
+    else { // blanc/rouge 
           if (altern==2) { g.setColor(1,0,0); altern=3; }
           else { // noir bleu clair
-                g.setColor(0,0,0);
-                g.fillRect (2,28,172,108);
-                g.setColor('#00F0FF');
-                altern=0;
-          }
-    }
+                g.setColor(0,0,0); g.fillRect (2,28,172,108); g.setColor('#00F0FF'); altern=0;}
+         }
   }
-
-  y-=11;
-  g.setFontAlign(0, 0).setFont("Anton").drawString(aff, x, y); // draw time
+  y-=11; g.setFontAlign(0, 0).setFont("Anton").drawString(aff, x, y); 
   
   //-----------------------------------------------
   //       JOUR MOIS 
   //
-  var jourSem = "";
-  var calWeek = false;
+  var jourSem = ""; var calWeek = false;
 
-  jourSem = require("locale").dow(Date(), calWeek ? 1 : 0);
-  deb=jourSem.substring(0,1);
-  deb=deb.toUpperCase();
-  jourSem = deb+jourSem.substring(1,3);
+  jourSem = require("locale").dow(Date(), calWeek ? 1 : 0); deb=jourSem.substring(0,1); deb=deb.toUpperCase(); jourSem = deb+jourSem.substring(1,3);
   // DATE MOIS 
-  var dateOnMain = "Long";
-  var dateStr = (dateOnMain === "ISO8601" ? isoStr(Date()) : require("locale").date(Date(), (dateOnMain === "Long" ? 0 : 1)));
-  // annee 4 derniers 
-  // dateStr.substring(0,dateStr.length-4);
-  var jourMois= dateStr.substring(0,2);
-  var blanc=dateStr.indexOf(" ");
-  var mois =(dateStr.substring(blanc,dateStr.length)).substring(0,4);
+  var dateOnMain = "Long"; var dateStr = (dateOnMain === "ISO8601" ? isoStr(Date()) : require("locale").date(Date(), (dateOnMain === "Long" ? 0 : 1)));
+  var jourMois= dateStr.substring(0,2); 
+  var blanc=dateStr.indexOf(" "); var mois =(dateStr.substring(blanc,dateStr.length)).substring(0,4);
 
   g.setColor(0,0,0); // noir
  
-  x+=4; y+=55;
-  dateStr=jourSem+"        ";
-  g.setFont("8x12",3);
-  g.drawString(dateStr, x, y);
-  //
-  x+=40; y+=1;
-  dateStr=jourMois+"    ";
-  g.setFont("Vector",40);
-  g.drawString(dateStr,x,y);
-  //
-  x+=6; y+=0;
-  dateStr=mois.toUpperCase();
-  g.setFont("8x12",3);
-  g.drawString(dateStr,x,y);
+  x+=4; y+=55; dateStr=jourSem+"        "; g.setFont("8x12",3); g.drawString(dateStr, x, y);
+  x+=40; y+=1; dateStr=jourMois+"    ";  g.setFont("Vector",40); g.drawString(dateStr,x,y);
+  x+=6; y+=0;  dateStr=mois.toUpperCase(); g.setFont("8x12",3); g.drawString(dateStr,x,y);
   
   //-----------------------------------------------
   //           CALENDRIER 
-  updateCalendar();
+  updateCalendar(); 
   timeToNext();
   x=5; y+=32;
-  if (nb_heures!=0 || nb_minutes!=0 ) {
-  calen=nb_heures+":"+nb_minutes+" "+titre;
-  } else {
-  calen= "sans elements" ;
-  }
+  if (nb_heures!=0 || nb_minutes!=0 ) { calen=nb_heures+":"+nb_minutes+" "+titre;}  else { calen= "sans elements" ;}
     
   g.setFont("Vector",20);
   g.setFontAlign(-1, 0);
   g.drawString(calen,x,y);
   
-  if ((nb_heures==1) && (nb_minutes==0)) {
-     Bangle.buzz(1000);
-  }
-  if ((nb_heures==0) && (nb_minutes==30)) {
-     Bangle.buzz(2000); Tsleep(1000);Bangle.buzz(1000);
-  }
-    if ((nb_heures==0) && (nb_minutes==30)) {
-     i=0;
-     while(i<4) { Bangle.buzz(500);Tsleep(500); }
-  }
+  if ((nb_heures==1) && (nb_minutes==0)) {Bangle.buzz(1000);}
+  if ((nb_heures==0) && (nb_minutes==30)) {Bangle.buzz(2000); Tsleep(1000);Bangle.buzz(1000);}
+  if ((nb_heures==0) && (nb_minutes==30)) {i=0; while(i<4) { Bangle.buzz(500);Tsleep(500);i+=1 } }
+  
   //  ----  generiques
 
   acqui_press();
   
-  //var momo_rep=0;
-  //if (momo_rep => 3) {
-  //    aff_momoregular();
-  //    momo_rep=0;
-  //    Tsleep(10000);
-  //}
-  //else {
-  //    momo_rep +=1;
-  //}
+  if (var momo_rep => 3) { aff_momoregular(); momo_rep=0; Tsleep(8000); } else { momo_rep +=1;}
 
 }
 
 //-----------------------------------------------------------------------
 
-function aff_second() {
-  
-  ecran=2;
-  set_Aff();
+function aff_second() { ecran=2; set_Aff();
 
   console.log("affichage second");
-  g.setFont("Vector",24);
-  
-//  console.log(counterInterval);
-//  if (counterInterval!=undefined) {clearInterval(counterInterval);counterInterval=undefined;}
+  g.setFont("Vector",24);  g.setFontAlign(-1, 0);
   
   var batt=E.getBattery().toString()+ "%";
-  
-  g.setFontAlign(-1, 0);
   y=40; g.drawString("B:"+batt, x, y);
   y+=30;g.drawString(" T:"+temperature, x, y);
-  if (pression-1013>=0){tend="Beau +"+pression-1013;}
-  else {tend="Mauv "+pression-1013;}
-  tend=pression-1013;
-  console.log (tend);
-  y+=30;g.drawString("Prs:"+pression+" "+tend, x, y);
+  if (pression-1013>=0){tend="Beau "+pression-1013;}   else {tend="Mauv "+pression-1013;} y+=30;g.drawString("Prs:"+pression+" "+tend, x, y);
   y+=30;g.drawString(" Alt:"+altitude+" m", x, y);  
   
   Tsleep_Led (5000,1,1);
@@ -337,17 +211,12 @@ function aff_second() {
 //          PAGE CALENDRIER 
 
 function fait_titre(titre) {
-  if (titre!="") {
-      if (titre.length>10) { 
-          titre=titre.substring(0,10);
-          console.log(titre,titre.length);
-      }
-  }
+  if (titre!="") { if (titre.length>10) { titre=titre.substring(0,10); }  }
+  console.log(titre,titre.length);
   return titre;
 }
 
-var Haut=24;
-var inter=0;
+var Haut=24; var inter=0;
 
 function drawEventHeader(event, y) {
 
@@ -430,13 +299,11 @@ function drawFutureEvents(y) {
 }
 
 //-----------------------------------------------------------------------
-function aff_agenda() {
-  ecran=3;
+function aff_agenda() { ecran=3;set_aff();
+                       
   console.log ("troisieme ecran");
-  set_Aff();
   
-  g.setFontAlign(-1, 0);
-  g.clearRect(5,24,g.getWidth()-5,g.getHeight());
+  g.setFontAlign(-1, 0); g.clearRect(5,24,g.getWidth()-5,g.getHeight());
   updateCalendar();
   y = 33;
   y = drawCurrentEvents(y);
@@ -448,6 +315,7 @@ function aff_agenda() {
 // ---------------
 function aff_momo() {
   ecran=4;
+
   //lit_img=0;
   //for (i=0;i!=fic_img.length;i++) {
   //    img=lit_img(fic_img[i]);
