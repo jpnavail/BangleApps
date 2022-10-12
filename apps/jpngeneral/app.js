@@ -24,7 +24,7 @@ var fic; var T; var lit_img=0; var fic_img=["mote2","mote1","mote3","moto1","mot
 function Tsleep(ms) { var ok="0"; var debut=Date.now();
   
   while (ok=="0") {  
-    if (boutton ==1 ) { ok="1"; boutton=0;} else { if Date.now();-debut < ms ) {ok="0";} else {ok="1"; } }
+    if (boutton ==1 ) { ok="1"; boutton=0;} else { if (Date.now()-debut < ms ) {ok="0";} else {ok="1"; } }
   }
 }
 
@@ -48,7 +48,7 @@ function Tsleep_Led(ms,led,etat) {   var change=0; var ok="0"; var debut=Date.no
 //-------FCT -AFFICHAGES ----------------
 function set_Aff() { g.clear(reset); Bangle.drawWidgets(); g.setFontAlign(0,0); g.setFont("Vector",40); g.setColor(0,0,0); }
 
-function lit _fic (i) { fic=fic_img[i]+".raw"; console.log(fic,"Lecture"); img=require("Storage").read(fic); console.log(img.length); }
+function lit_fic (i) { fic=fic_img[i]+".raw"; console.log(fic,"Lecture"); img=require("Storage").read(fic); console.log(img.length); }
 
 function D_ecran(img,x,y,T) { g.clear(); g.drawImage(atob(img), x, y, { scale: T }); }
 
@@ -77,7 +77,7 @@ function suite_press(data) {
   temperature=temperature.toString();
   var point=temperature.indexOf(".");
   if (point==0) { point=temperature.length;temperature = temperature.substring(0,point);}
-  else { temperature = temperature.substring(0,point)+"�"+temperature.substring(point+1,point+2);}
+  else { temperature = temperature.substring(0,point)+"°"+temperature.substring(point+1,point+2);}
   //console.log("Temp:",temperature);
 
   // pression  : moyenne de 5 
@@ -114,9 +114,7 @@ function isActive(event) {
   return timeActive >= 0 && timeActive <= event.durationInSeconds;
 }
 
-function zp(str) {
-  return ("0"+str).substr(-2);
-}
+function zp(str) { return ("0"+str).substr(-2);}
 
 function timeToNext() {
   if (next.length !=0) {
@@ -181,14 +179,13 @@ function aff_principal() { ecran=1; set_Aff();
   
   if ((nb_heures==1) && (nb_minutes==0)) {Bangle.buzz(1000);}
   if ((nb_heures==0) && (nb_minutes==30)) {Bangle.buzz(2000); Tsleep(1000);Bangle.buzz(1000);}
-  if ((nb_heures==0) && (nb_minutes==30)) {i=0; while(i<4) { Bangle.buzz(500);Tsleep(500);i+=1 } }
+  if ((nb_heures==0) && (nb_minutes==30)) {i=0; while(i<4) { Bangle.buzz(500);Tsleep(500);i+=1;} }
   
   //  ----  generiques
 
   acqui_press();
-  
-  if (var momo_rep => 3) { aff_momoregular(); momo_rep=0; Tsleep(8000); } else { momo_rep +=1;}
-
+  var momo_rep=0;
+  if (momo_rep => 3) { aff_momoregular(); momo_rep=0; Tsleep(8000); } else { momo_rep +=1;}
 }
 
 //-----------------------------------------------------------------------
@@ -201,7 +198,8 @@ function aff_second() { ecran=2; set_Aff();
   var batt=E.getBattery().toString()+ "%";
   y=40; g.drawString("B:"+batt, x, y);
   y+=30;g.drawString(" T:"+temperature, x, y);
-  if (pression-1013>=0){tend="Beau "+pression-1013;}   else {tend="Mauv "+pression-1013;} y+=30;g.drawString("Prs:"+pression+" "+tend, x, y);
+  if (pression-1013>=0){tend="Beau "+pression-1013;} else {tend="Mauv "+pression-1013;}
+  y+=30;g.drawString("Prs:"+pression+" "+tend, x, y);
   y+=30;g.drawString(" Alt:"+altitude+" m", x, y);  
   
   Tsleep_Led (5000,1,1);
@@ -273,7 +271,7 @@ function drawCurrentEvents(y) {
   //console.log("y",y); 
   if(current.length === 0) {
     titre="";titre=fait_titre(titre);
-    console.log("premi�re ligne");
+    console.log("premiere ligne");
     y = drawEvent({timestamp: getTime(), durationInSeconds: 100},titre, y);
   } else {
     y = drawEventHeader(current[0], y);
