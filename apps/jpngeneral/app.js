@@ -14,57 +14,43 @@ var img="sJyI/lZWK1ZWVlZWVlZWVlaBVitWVlZWVlaAgXpWVlaAgFZWgHp6VitVVU9WVVV6VlVWVlV
 //-----------------------------------------------------------------------
 //                VARIABLES  GENERALES
 //-----------------------------------------------------------------------
-var counterInterval;
-var momoregular;
-var x = g.getWidth() / 2;
-var y = g.getHeight() / 2;
-var boutton;
-
+var counterInterval; var momoregular;var boutton;
+var x = g.getWidth() / 2; var y = g.getHeight() / 2;
+//var img="";
+var fic; var T; var lit_img=0; var fic_img=["mote2","mote1","mote3","moto1","moto2"];
 //-----------------------------------------------------------------------
 //                FONCTIONS UTILITAIRES
 //-----------------------------------------------------------------------
-function Tsleep(ms) {
-  var debut;
-  var ok="0";
-  var maintenant;
-   
-  debut=Date.now();
-  while (ok=="0") {
+function Tsleep(ms) { var ok="0"; var debut=Date.now();
+  
+  while (ok=="0") { 
     if (boutton ==1 ) { ok="1"; boutton=0;}
-    else {
-       maintenant=Date.now();
-       if (maintenant-debut < ms ) {ok="0";}
-       else {ok="1"; }
+    else { if Date.now();-debut < ms ) {ok="0";}
+           else {ok="1"; }
         }
   }
 }
 
-function Tsleep_Led(ms,led,etat) {
-  var change=0;
-  var debut;
-  var ok="0";
-  var maintenant;
+function Tsleep_Led(ms,led,etat) {   var change=0; var ok="0";
    
-  debut=Date.now();
+  var debut=Date.now();
   while (ok=="0") {
     
      // TEST FIN
      if (boutton ==1 ) { ok="1"; boutton=0;}
      else {
-           maintenant=Date.now();
-           if (maintenant-debut < ms ) {ok="0";}
+           if (Date.now() < ms ) {ok="0";}
            else {ok="1"; }
      }
-    // BOUCLE     
-    if (change==0) {
+    // BOUCLE + LED    
+    if (change==0) { if (etat==1) {change=1;}
         if (led==1) {LED1.write(1);}
         else { LED2.write(1);}
-        if (etat==1) {change=1;}
     }
-    else {
+    else { change=0;
         if (led==1) {LED1.write(0);}
         else { LED2.write(0);}
-        change=0;
+
     Tsleep(500);
     }
   }
@@ -72,46 +58,15 @@ function Tsleep_Led(ms,led,etat) {
   
 //--------------------------------------
 //-------FCT -AFFICHAGES ----------------
-function set_Aff() {
-  g.clear(reset);
-  Bangle.drawWidgets();
-  g.setFontAlign(0,0); // center font
-  g.setFont("Vector",40); // vector font, 80px 
-  g.setColor(0,0,0);
-}
+function set_Aff() { g.clear(reset); Bangle.drawWidgets(); g.setFontAlign(0,0); g.setFont("Vector",40); g.setColor(0,0,0); }
 
-//--------------------------------------
-//var img="";
-var fic;
-var T;
-var lit_img=0;
-var fic_img=["mote2","mote1","mote3","moto1","moto2"];
+function lit _fic (i) {
+   fic=fic_img[i]+".raw"; console.log(fic,"Lecture");    img=require("Storage").read(fic); console.log(img.length); }
 
-function lit (fic) {
-   console.log(fic);
-   fs=require("Storage").open(fic,"r");
-   fs.read(img);
-   console.log(img);
-   //console.log(img.length);
-   return(img);
-}
-
-function D_ecran(img,x,y,T) {
-   g.clear();
-   //console.log(img.length);
-   g.drawImage(atob(img), x, y, { scale: T });
-}
+function D_ecran(img,x,y,T) { g.clear(); g.drawImage(atob(img), x, y, { scale: T }); }
 
 // ---------------
-function aff_momoregular () {
-  lit_img=1;
-  if (lit_img==0) {
-       fic=fic_img[4];
-       img=lit(fic);
-       lit_img=1;
-  }
-  D_ecran (img,0,24,1);
-}
+function aff_momoregular () { if (lit_img==0) { img=lit_fic(4);lit_img=1;} D_ecran (img,0,24,1); }
 
 //-------------------------------------------------------
 // temperatures pression, altitude 
