@@ -345,6 +345,10 @@ function aiguillage (){
 function general() {
 
   if (lit_img==0) {img=lit_fic(4);}  D_ecran(img,0,24,1);
+  
+  // rafraichissement en secondes   nb de cycles avant momo
+  //var rafraichi=6; var nbaffpr_momo=2; // tous les x/2 momo 
+  var rafraichi=60; var nbaffpr_momo=8;
 
   if (!counterInterval)
       counterInterval = setInterval(aff_principal, rafraichi*1000);
@@ -371,10 +375,6 @@ Bangle.setBarometerPower(true);
 acqui_press();
 
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
-
-// rafraichissement en secondes   nb de cycles avant momo
-//var rafraichi=6; var nbaffpr_momo=2; // tous les x/2 momo 
-var rafraichi=60; var nbaffpr_momo=8;
 
 general ();
 
