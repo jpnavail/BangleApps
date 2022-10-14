@@ -351,8 +351,8 @@ function general() {
 
   aff_principal();
 
-  var moins_tps; var inter_momo;
-  if ((0,5*rafraichi) >=10) {moins_tps=10;} else {moins_tps=(0,5*rafraichi);}
+  var moins_tps; var inter_momo;var laps=15; //limite max d affichage
+  if ((0,5*rafraichi) >=laps) {moins_tps=laps;} else {moins_tps=(0,5*rafraichi);}
   inter_momo=((nbaffpr_momo*rafraichi)-moins_tps)*1000;
   if (!momoregular)
       momoregular = setInterval(aff_momoregular,inter_momo);
