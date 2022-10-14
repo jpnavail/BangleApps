@@ -57,7 +57,7 @@ function set_Aff() { g.clearRect(0,0,176,176); Bangle.drawWidgets(); g.setFontAl
 
 function lit_fic (i) { console.log(fic=fic_img[i]+".raw","Lecture"); img=require("Storage").read(fic=fic_img[i]+".raw"); console.log(img.length);lit_img=1;return(img); }
 
-function D_ecran(img,x,y) {g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y);Bangle.drawWidgets();}
+function D_ecran(img,x,y) {g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y);Bangle.drawWidgets();console.log("xx");}
 
 function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
 //-------------------------------------------------------
@@ -176,9 +176,7 @@ function aff_principal() { ecran=1;
   
   //-----------------------------------------------
   //           CALENDRIER 
-  updateCalendar(); 
-  timeToNext();
-  x=5; y+=32;
+  updateCalendar(); timeToNext(); x=5; y+=32;
   if (nb_heures!=0 || nb_minutes!=0 ) { calen=nb_heures+":"+nb_minutes+" "+titre;}  else { calen= "sans elements" ;}
     
   g.setFont("Vector",20);
@@ -317,7 +315,11 @@ function aff_agenda() { ecran=3;set_Aff();
 }
 
 // ---------------
-function aff_momo() {var k;ecran=4;for (k=0;k!=fic_img.length;k++) { img=lit_fic(k); D_ecran(img,0,24,1); Sleep(3);}  lit_img=0; }
+function aff_momo() {
+  var k;var diapo_id;
+  ecran=4;
+//  if (!diapo_id) diapo_id = setInterval(D_ecran, 5*1000);
+  for (k=0;k!=fic_img.length;k++) { img=lit_fic(k); D_ecran(img,0,24); Sleep(6);}  lit_img=0; }
 
 //-----------------------------------------------------------------------
 //                         PRINCIPAL
@@ -339,6 +341,7 @@ function aiguillage (){
 }
 
 //------------------
+
 function general() {
 
   if (lit_img==0) {img=lit_fic(4);}  D_ecran(img,0,24,1);
