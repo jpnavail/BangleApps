@@ -17,24 +17,31 @@ var img=""
 //-----------------------------------------------------------------------
 var counterInterval; var momoregular;var boutton;
 var x = g.getWidth() / 2; var y = g.getHeight() / 2;
+//var img="";
 var fic; var T; var lit_img=0;var fic_img=["mote2","mote1","mote3","moto1","moto2"];
+var timeout;
 //-----------------------------------------------------------------------
 //                FONCTIONS UTILITAIRES
 //-----------------------------------------------------------------------
-function Tsleep(ms) { var ok="0"; var debut=Date.now();
-  
-  while (ok=="0") {  
-    if (boutton ==1 ) { ok="1"; boutton=0;} else { if (Date.now()-debut < ms ) {ok="0";} else {ok="1"; } }
+function Tsleep(ms) { var ok="0"; var debut;var maintenant;
+  console.log("----");
+  debut=Date.now(); while (ok=="0") { 
+  if (boutton ==1 ) {ok="1"; boutton=0;} else{maintenant=Date.now(); if(maintenant-debut <= ms) {ok="0";} else {ok="1";} }
   }
 }
 
-function Tsleep_Led(ms,led,etat) {   var change=0; var ok="0"; var debut=Date.now();
- 
+function Sleep (s){ var nb;
+  if (Math.floor(s)!=0) { for (nb=1;nb<=Math.floor(s);nb++) {Tsleep(1000);} }
+  nb=Math.floor(s)-s; console.log (nb); if(nb!=0) { Tsleep(nb); }
+}
+
+function Tsleep_Led(ms,led,etat) {   var change=0; var ok="0"; var debut; var maintenant;
+  debut=Date.now();
   while (ok=="0") {
     
      // TEST FIN
      if (boutton ==1 ) { ok="1"; boutton=0;}
-     else { if (Date.now() < ms ) {ok="0";} else {ok="1"; }  }
+     else { maintenant=Date.now(); if(maintenant-debut <=ms) {ok="0";} else {ok="1";}  }
     
     // BOUCLE + LED    
     if (change==0) { if (etat==1) {  change=1; if (led==1) {LED1.write(1);} else { LED2.write(1);}  }}
@@ -50,11 +57,9 @@ function set_Aff() { g.clearRect(0,0,176,176); Bangle.drawWidgets(); g.setFontAl
 
 function lit_fic (i) { console.log(fic=fic_img[i]+".raw","Lecture"); img=require("Storage").read(fic=fic_img[i]+".raw"); console.log(img.length);lit_img=1;return(img); }
 
-function D_ecran(img,x,y,T) { g.clear(); g.drawImage(atob(img), x, y, { scale: T }); }
+function D_ecran(img,x,y) {g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y);Bangle.drawWidgets();}
 
-// ---------------
-function aff_momoregular () {if (lit_img==0) { img=lit_fic(4);} D_ecran(img,0,24,1);  }
-
+function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
 //-------------------------------------------------------
 // temperatures pression, altitude 
 //
@@ -127,11 +132,12 @@ function timeToNext() {
 //-------------------------------------------------------------------------------------------
 //                AFFICHAGES 
 //-------------------------------------------------------------------------------------------
-var altern=0;var momo_rep=0;
+var altern=0;
 
-function aff_principal() { ecran=1; set_Aff();
+function aff_principal() { ecran=1; 
+  console.log("ecran 1",img.length);
 
-  console.log("ecran 1",momo_rep);
+  set_Aff(); 
   //
   // --------- HEURE et MINUTE ------------------
   //
@@ -186,10 +192,8 @@ function aff_principal() { ecran=1; set_Aff();
   //  ----  generiques
 
   acqui_press();
-  if (momo_rep >= 5) {aff_momoregular(); momo_rep=0; } else { momo_rep +=1;}
+  if (lit_img==0) {img=lit_fic(4);}
 }
-
-
 
 //-----------------------------------------------------------------------
 
@@ -204,7 +208,7 @@ function aff_second() { ecran=2; set_Aff();
   y+=30;g.drawString("Prs:"+pression+" "+tend, x, y);
   y+=30;g.drawString(" Alt:"+altitude+" m", x, y);  
   
-  Tsleep_Led (5000,1,1);
+ // Tsleep_Led (5000,1,1);
 }
 
 //-------------------------------------------------------
@@ -299,21 +303,21 @@ function drawFutureEvents(y) {
 }
 
 //-----------------------------------------------------------------------
-function aff_agenda() { ecran=3;set_aff();
-                       
+function aff_agenda() { ecran=3;set_Aff();
+
   console.log ("troisieme ecran");
-  
+
   g.setFontAlign(-1, 0); g.clearRect(5,24,g.getWidth()-5,g.getHeight());
   updateCalendar();
   y = 33;
   y = drawCurrentEvents(y);
   drawFutureEvents(y);
   
-  Tsleep_Led (5000,2,1);
+//  Tsleep_Led (5000,2,1);
 }
 
 // ---------------
-function aff_momo() {ecran=4; for (i=0;i!=fic_img.length;i++) { D_ecran (lit_img(i),0,24,1); Tsleep_Led (5000);}  lit_img=0; }
+function aff_momo() {var k;ecran=4;for (k=0;k!=fic_img.length;k++) { img=lit_fic(k); D_ecran(img,0,24,1); Sleep(3);}  lit_img=0; }
 
 //-----------------------------------------------------------------------
 //                         PRINCIPAL
@@ -337,34 +341,41 @@ function aiguillage (){
 //------------------
 function general() {
 
-  aff_principal();
+  if (lit_img==0) {img=lit_fic(4);}  D_ecran(img,0,24,1);
 
   if (!counterInterval)
-      counterInterval = setInterval(aff_principal, 10000);
+      counterInterval = setInterval(aff_principal, rafraichi*1000);
+    
+  aff_principal();
 
-  //if (!momoregular)
-  //    momoregular = setInterval(aff_momoregular, 1*60005);
+  var inter_momo=(nbaffpr_momo+0,5)*rafraichi*1000;
+  if (!momoregular)
+      momoregular = setInterval(aff_momoregular,inter_momo);
   
 }
 
 //--------------------     MAIN           -----------------------------------
 
+
+setTimeout(general,10000);
+
+// Load widgets
+Bangle.loadWidgets();
+
 Bangle.setBarometerPower(true);
-//setTimeout(general,15000);
+acqui_press();
 
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
 
-acqui_press();
+var test=1;
+var rafraichi=6; // rafraichissement en secondes 
+var nbaffpr_momo=2; // tous les x/2 momo 
+if (test==0) { rafraichi=60; nbaffpr_momo=8;}
+
 general ();
-
-//aff_momoregular();
-
 
 // Register hooks for LCD on/off event and screen lock on/off event
 //Bangle.on('lcdPower', on => {   general(); });
 //Bangle.on('lock', on => { general(); });
-
-// Load widgets
-Bangle.loadWidgets();
 
 // end of file
