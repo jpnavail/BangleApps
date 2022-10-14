@@ -315,11 +315,18 @@ function aff_agenda() { ecran=3;set_Aff();
 }
 
 // ---------------
+function basic(k) {img=lit_fic(k); D_ecran(img,0,24);}
+
+// ---------------
 function aff_momo() {
   var k;var diapo_id;
   ecran=4;
 //  if (!diapo_id) diapo_id = setInterval(D_ecran, 5*1000);
-  for (k=0;k!=fic_img.length;k++) { img=lit_fic(k); D_ecran(img,0,24); Sleep(6);}  lit_img=0; }
+//  for (k=0;k!=fic_img.length;k++) {setTimeout(basic,5000);basic(k);}  
+  basic(0);
+//  lit_img=0; 
+}
+
 
 //-----------------------------------------------------------------------
 //                         PRINCIPAL
