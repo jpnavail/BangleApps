@@ -348,10 +348,12 @@ function general() {
 
   if (!counterInterval)
       counterInterval = setInterval(aff_principal, rafraichi*1000);
-    
+
   aff_principal();
 
-  var inter_momo=(nbaffpr_momo+0,5)*rafraichi*1000;
+  var moins_tps; var inter_momo;
+  if ((0,5*rafraichi) >=10) {moins_tps=10;} else {moins_tps=(0,5*rafraichi);}
+  inter_momo=((nbaffpr_momo*rafraichi)-moins_tps)*1000;
   if (!momoregular)
       momoregular = setInterval(aff_momoregular,inter_momo);
   
@@ -360,7 +362,7 @@ function general() {
 //--------------------     MAIN           -----------------------------------
 
 
-setTimeout(general,10000);
+//setTimeout(general,10000);
 
 // Load widgets
 Bangle.loadWidgets();
@@ -370,10 +372,9 @@ acqui_press();
 
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
 
-var test=0;
-var rafraichi=6; // rafraichissement en secondes 
-var nbaffpr_momo=2; // tous les x/2 momo 
-if (test==0) { rafraichi=60; nbaffpr_momo=8;}
+// rafraichissement en secondes   nb de cycles avant momo
+//var rafraichi=6; var nbaffpr_momo=2; // tous les x/2 momo 
+var rafraichi=60; var nbaffpr_momo=8;
 
 general ();
 
