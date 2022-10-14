@@ -367,7 +367,7 @@ acqui_press();
 
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
 
-var test=1;
+var test=0;
 var rafraichi=6; // rafraichissement en secondes 
 var nbaffpr_momo=2; // tous les x/2 momo 
 if (test==0) { rafraichi=60; nbaffpr_momo=8;}
