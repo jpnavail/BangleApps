@@ -118,15 +118,24 @@ function isActive(event) {
 
 function zp(str) { return ("0"+str).substr(-2);}
 
+
+var chaine; var nb=10;
+function limit_chaine (chaine,nb) {
+  if (chaine.length !=0) { if (chaine.length>=nb+1) {chaine=chaine.substring(0,nb);} }
+  return chaine;
+}
+
 function timeToNext() {
   calen=" Sans elements";var entete;
-  if (next.length !=0) { calen=next[0].title;var tempo=new Date(next[0].timestamp*1000);
+  if (next.length !=0) { calen=limit_chaine(next[0].title,10);var tempo=new Date(next[0].timestamp*1000);
       var offset = 0-tempo.getTimezoneOffset()/1440;
       var days = Math.floor((tempo.getTime()/1000)/86400+offset)-Math.floor(getTime()/86400+offset);
-      if (days==0) { nb_heures=zp(tempo.getHours());nb_minutes=zp(tempo.getMinutes());calen=nb_heures+":"+nb_minutes+" "+calen;}
-      else { entete = days===1?/*LANG*/"Demain ":/*LANG*/"J+"+days+" "; calen=entete+calen; }
+      nb_heures=zp(tempo.getHours());nb_minutes=zp(tempo.getMinutes());
+      if (days==0) { calen=nb_heures+":"+nb_minutes+" "+calen;}
+      else { entete = days===1?/*LANG*/"Demain ":/*LANG*/"J+"+days+" "; calen=entete+calen;}
   } 
 }
+
 //-------------------------------------------------------------------------------------------
 //                AFFICHAGES 
 //-------------------------------------------------------------------------------------------
@@ -183,7 +192,7 @@ function aff_principal() { ecran=1;
 
   if ((nb_heures==1) && (nb_minutes==0)) {Bangle.buzz(1000);}
   if ((nb_heures==0) && (nb_minutes==30)) {Bangle.buzz(2000); Tsleep(1000);Bangle.buzz(1000);}
-  if ((nb_heures==0) && (nb_minutes==30)) {i=0; while(i<4) { Bangle.buzz(500);Tsleep(500);i+=1;} }
+  if ((nb_heures==0) && (nb_minutes==10)) {i=0; while(i<4) { Bangle.buzz(500);Tsleep(500);i+=1;} }
 
   //  ----  generiques
 
@@ -208,12 +217,6 @@ function aff_second() { ecran=2; set_Aff();
 
 //-------------------------------------------------------
 //          PAGE CALENDRIER 
-
-function fait_titre(titre) {
-  if (titre!="") { if (titre.length>10) { titre=titre.substring(0,10); }  }
-  console.log(titre,titre.length);
-  return titre;
-}
 
 var Haut=24; var inter=0;
 
@@ -253,20 +256,19 @@ function drawCurrentEvents(y) {
   
   g.setColor(0,0,1); g.clearRect(5, y, g.getWidth() - 5, y + curEventHeight); curEventHeight = y;
 
-  if(current.length === 0) { titre="";titre=fait_titre(titre); console.log("premiere ligne");
-   // y = drawEvent({timestamp: getTime(), durationInSeconds: 100},titre, y);
-  } 
+  if(current.length === 0) { titre=""; console.log("premiere ligne");} 
   else {y = drawEventHeader(current[0], y);
-    for (event of current) { console.log("current"); titre=event.title;titre=fait_titre(titre);y = drawEventBody(titre, y);}
+    for (event of current) { console.log("current"); titre=limit_chaine(event.title,10);
+                             y = drawEventBody(titre, y);}
   }
   curEventHeight = y - curEventHeight;
   return y;
 }
 
 function drawFutureEvents(y) { g.setColor(g.theme.fg);
-  for (event of next) { console.log("futur"); titre=event.title;titre=fait_titre(titre); y = drawEvent(event,titre,y);
-    if(y>g.getHeight())break;
-  }
+  for (event of next) { console.log("futur");titre=limit_chaine(event.title,10);
+                       y = drawEvent(event,titre,y);
+                       if(y>g.getHeight())break; }
   return y;
 }
 
