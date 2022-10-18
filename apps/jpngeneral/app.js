@@ -121,16 +121,12 @@ function zp(str) { return ("0"+str).substr(-2);}
 function timeToNext() {
   calen=" Sans elements";var entete;
   if (next.length !=0) { calen=next[0].title;var tempo=new Date(next[0].timestamp*1000);
-     if (isActive(next[0])) { 
-       nb_heures=zp(tempo.getHours());nb_minutes=zp(tempo.getMinutes());calen=nb_heures+":"+nb_minutes+" "+calen;} 
-     else {
-          var offset = 0-tempo.getTimezoneOffset()/1440;
-          var days = Math.floor((tempo.getTime()/1000)/86400+offset)-Math.floor(getTime()/86400+offset);
-          if(days > 0) { entete = days===1?/*LANG*/"Demain ":/*LANG*/"J+"+days+" "; calen=entete+calen; }
-      }
+      var offset = 0-tempo.getTimezoneOffset()/1440;
+      var days = Math.floor((tempo.getTime()/1000)/86400+offset)-Math.floor(getTime()/86400+offset);
+      if (days==0) { nb_heures=zp(tempo.getHours());nb_minutes=zp(tempo.getMinutes());calen=nb_heures+":"+nb_minutes+" "+calen;}
+      else { entete = days===1?/*LANG*/"Demain ":/*LANG*/"J+"+days+" "; calen=entete+calen; }
   } 
 }
-
 //-------------------------------------------------------------------------------------------
 //                AFFICHAGES 
 //-------------------------------------------------------------------------------------------
