@@ -186,7 +186,7 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
 
   if (aff_type[altern].bg !="No") { fond=require("Storage").read(aff_type[altern].bg+".raw");
        console.log (aff_type[altern].bg+".raw",fond.length);
-       g.drawImage( require("heatshrink").decompress(atob(fond))); //Bangle.drawWidgets();
+       g.drawImage( require("heatshrink").decompress(atob(fond)),0,0); //Bangle.drawWidgets();
        }
 
   if (aff_type[altern].bg_l1 !="No") { color_it(aff_type[altern].bg_l1); g.fillRect (0,28,176,108); }
