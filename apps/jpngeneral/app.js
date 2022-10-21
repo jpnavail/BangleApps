@@ -186,7 +186,7 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
 
   if (aff_type[altern].bg !="No") { fond=require("Storage").read(aff_type[altern].bg+".raw");
        console.log (aff_type[altern].bg+".raw",fond.length);
-       g.drawImage( require("heatshrink").decompress(atob(fond))); Bangle.drawWidgets();
+       g.drawImage( require("heatshrink").decompress(atob(fond))); //Bangle.drawWidgets();
        }
 
   if (aff_type[altern].bg_l1 !="No") { color_it(aff_type[altern].bg_l1); g.fillRect (0,28,176,108); }
@@ -226,11 +226,9 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   altern +=1;if (altern>=aff_type.length) altern=0;
   console.log(altern);
 
-  g.setFont("Vector",23);
-  g.setFontAlign(-1, 0);
-  g.drawString(calen,x,y);
+  g.setFont("Vector",23); g.setFontAlign(-1, 0);   g.drawString(calen,x,y);
 
-  if ((nb_heures==1) && (nb_minutes==0)) {Bangle.buzz(1000);}
+  if ((nb_heures==1) && (nb_minutes==0)) {Bangle.buzz(2000);}
   if ((nb_heures==0) && (nb_minutes==30)) {Bangle.buzz(2000); Tsleep(1000);Bangle.buzz(1000);}
   if ((nb_heures==0) && (nb_minutes==10)) {i=0; while(i<4) { Bangle.buzz(500);Tsleep(500);i+=1;} }
 
