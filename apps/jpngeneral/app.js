@@ -10,13 +10,47 @@ Graphics.prototype.setFontAntonSmall = function(scale) {
   // Actual height 53 (52 - 0)
   g.setFontCustom(atob(Anton_Small), 60 + (scale << 8) + (1 << 16));};
 
+var couleur=[
+  {"code":"1","nom":"Noir","valeur":"0x0000"},
+  {"code":"2","nom":"Bleu_fonce","valeur":"0x000F"},
+  {"code":"3","nom":"Vert_fonce","valeur":"0x03E0"},
+  {"code":"4","nom":"Bordeaux","valeur":"0x7800"},
+  {"code":"5","nom":"Violet","valeur":"0x780F"},
+  {"code":"6","nom":"Olive","valeur":"0x7BE0"},
+  {"code":"7","nom":"Gris_clair","valeur":"0xC618"},
+  {"code":"8","nom":"Gris_fonce","valeur":"0x7BEF"},
+  {"code":"9","nom":"Bleu","valeur":"0x001F"},
+  {"code":"10","nom":"Vert","valeur":"0x07E0"},
+  {"code":"11","nom":"Rouge","valeur":"0xF800"},
+  {"code":"12","nom":"Magenta","valeur":"0xF81F"},
+  {"code":"13","nom":"Jaune","valeur":"0xFFE0"},
+  {"code":"14","nom":"Blanc","valeur":"0xFFFF"},
+  {"code":"15","nom":"Orange","valeur":"0xFD20"},
+  {"code":"16","nom":"Vert_jaune","valeur":"0xAFE5"},
+  {"code":"17","nom":"Rose","valeur":"0xF81F"},
+  {"code":"18","nom":"Cyan_fonce","valeur":"0x03EF"},
+  {"code":"19","nom":"Cyan","valeur":"0x07FF"},
+   ];
+
+aff_type=[
+  { "bg":"colioure","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Bleu_fonce","bg_l3":"No","fg_l3":"Blanc"},
+  { "bg":"No","bg_l1":"Rouge","fg_l1":"Blanc","bg_l2":"No","fg_l2":"Noir","bg_l3":"No","fg_l3":"Noir"},
+  { "bg":"terre","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Blanc"},
+  { "bg":"No","bg_l1":"Noir","fg_l1":"Orange","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
+  { "bg":"montagne","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Noir"},
+  { "bg":"No","bg_l1":"Orange","fg_l1":"Bleu","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Bleu_fonce"},
+  ];
+
+
+var fic_img=["mote2","mote3","moto2"];
+
 //-----------------------------------------------------------------------
 //                VARIABLES  GENERALES
 //-----------------------------------------------------------------------
 var counterInterval; var momoregular;var boutton;
 var x = g.getWidth() / 2; var y = g.getHeight() / 2;
 var img="";var fic; var T;
-var lit_img=0;var fic_img=["mote2","mote3","moto1","moto2"];
+var lit_img=0;
 var timeout;
 //-----------------------------------------------------------------------
 //                FONCTIONS UTILITAIRES
@@ -51,6 +85,9 @@ function Tsleep_Led(ms,led,etat) {   var change=0; var ok="0"; var debut; var ma
 //-------FCT -AFFICHAGES ----------------
 function set_Aff() { g.clearRect(0,0,176,176); Bangle.drawWidgets(); g.setFontAlign(0,0); g.setFont("Vector",40); g.setColor(0,0,0);}
 
+function color_it(c_champ) { var ic; for (ic in couleur ) {if (c_champ == couleur[ic].nom) 
+         { g.setColor(Number(couleur[ic].valeur));ic=couleur.length;} }}
+
 function lit_fic (i) { console.log(fic=fic_img[i]+".raw","Lecture"); img=require("Storage").read(fic=fic_img[i]+".raw"); console.log(img.length);lit_img=1;return(img); }
 
 function D_ecran(img,x,y) {g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y);Bangle.drawWidgets();console.log("xx");}
@@ -79,22 +116,19 @@ function suite_press(data) {
   temperature=temperature.toString();
   var point=temperature.indexOf(".");
   if (point==0) { point=temperature.length;temperature = temperature.substring(0,point);}
-  else { temperature = temperature.substring(0,point)+"c"+temperature.substring(point+1,point+2);}
-  //console.log("Temp:",temperature);
+  else { temperature = temperature.substring(0,point+2);}
 
   // pression  : moyenne de 5 
   while (history_P.length>4) history_P.shift();
   history_P.push(press); pression = E.sum(history_P) / history_P.length; pression +=rect_press;
   
   pression=parseInt(pression)+0;
-  //console.log("Pression:", pression);
   
   // altitude : moyenne de 5 
   while (history_A.length>4) history_A.shift();
   history_A.push(alti);  altitude = E.sum(history_A) / history_A.length; altitude +=rect_alti;
   
   altitude=parseInt(altitude)+0;
-  //console.log("Altitude:",altitude);
 }
 
 //------------------------------------------------------
@@ -102,7 +136,7 @@ function suite_press(data) {
 var calendar = []; var current = []; var next = []; var event =[]; var titre;
 var nb_heures;var nb_minutes;
 
-function updateCalendar() {
+function updateCalendar() { 
   calendar = require("Storage").readJSON("android.calendar.json",true)||[];
   calendar = calendar.filter(e => isActive(e) || getTime() <= e.timestamp);
   calendar.sort((a,b) => a.timestamp - b.timestamp);
@@ -117,7 +151,6 @@ function isActive(event) {
 }
 
 function zp(str) { return ("0"+str).substr(-2);}
-
 
 var chaine; var nb=10;
 function limit_chaine (chaine,nb) {
@@ -141,29 +174,26 @@ function timeToNext() {
 //-------------------------------------------------------------------------------------------
 var altern=0;
 
-function aff_principal() { ecran=1; 
-  console.log("ecran 1",img.length);
-
+function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   set_Aff(); 
   //
   // --------- HEURE et MINUTE ------------------
   //
   var hh=new Date().getHours().toString(); var aff=hh+":";
-  var mm=new Date().getMinutes().toString(); if (mm.length==1) { aff=aff+"0"; } aff=aff+mm;
-    
-  //  rectangle rouge/blanc 
-  if ( altern==0 ) { g.setColor(1,0,0); g.fillRect (2,28,172,108); g.setColor(1,1,1); altern=1; } 
-  else { // Blanc bleu
-    if (altern==1) { g.setColor(0,0,1); altern=2; } 
-    else { // blanc/rouge 
-          if (altern==2) { g.setColor(1,0,0); altern=3; }
-          else { // noir bleu clair
-                g.setColor(0,0,0); g.fillRect (2,28,172,108); g.setColor('#00F0FF'); altern=0;}
-         }
-  }
-  x=83;y=75;
-  g.setFontAlign(0, 0).setFont("Anton").drawString(aff,x,y); 
-  
+  var mm=new Date().getMinutes().toString(); if (mm.length==1) aff=aff+"0"; aff=aff+mm;
+
+  var fond=""; var ic;
+
+  if (aff_type[altern].bg !="No") { fond=require("Storage").read(aff_type[altern].bg+".raw");
+       console.log (aff_type[altern].bg+".raw",fond.length);
+       g.drawImage( require("heatshrink").decompress(atob(fond))); Bangle.drawWidgets();
+       }
+
+  if (aff_type[altern].bg_l1 !="No") { color_it(aff_type[altern].bg_l1); g.fillRect (0,28,176,108); }
+  color_it(aff_type[altern].fg_l1);
+
+  x=83;y=75; g.setFontAlign(0, 0).setFont("Anton").drawString(aff,x,y); 
+
   //-----------------------------------------------
   //       JOUR MOIS 
   //
@@ -175,9 +205,12 @@ function aff_principal() { ecran=1;
   var jourMois= dateStr.substring(0,2); 
   var blanc=dateStr.indexOf(" "); var mois =(dateStr.substring(blanc,dateStr.length)).substring(0,4);
 
-  g.setColor(0,0,0); // noir
- 
-  x+=6; y+=55; dateStr=jourSem+"        "; g.setFont("8x12",3); g.drawString(dateStr, x, y);
+  x+=6; y+=55;
+
+  if (aff_type[altern].bg_l2 !="No") { color_it(aff_type[altern].bg_l2); g.fillRect (0,y-22,176,y+40);}
+  color_it(aff_type[altern].fg_l2);
+
+                dateStr=jourSem+"        "; g.setFont("8x12",3); g.drawString(dateStr, x, y);
   x+=40; y+=1; dateStr=jourMois+"    ";  g.setFont("Vector",40); g.drawString(dateStr,x,y);
   x+=6; y+=0;  dateStr=mois.toUpperCase(); g.setFont("8x12",3); g.drawString(dateStr,x,y);
   
@@ -186,7 +219,14 @@ function aff_principal() { ecran=1;
 
   updateCalendar(); timeToNext();
   x=5; y+=32;
-  g.setFont("Vector",20);
+
+  if (aff_type[altern].bg_l3 !="No") { color_it(aff_type[altern].bg_l3); g.fillRect(0,y,176,y+24);}
+  color_it(aff_type[altern].fg_l3);
+
+  altern +=1;if (altern>=aff_type.length) altern=0;
+  console.log(altern);
+
+  g.setFont("Vector",23);
   g.setFontAlign(-1, 0);
   g.drawString(calen,x,y);
 
@@ -197,7 +237,7 @@ function aff_principal() { ecran=1;
   //  ----  generiques
 
   acqui_press();
-  if (lit_img==0) {img=lit_fic(0);}
+  if (lit_img==0) img=lit_fic(0);
 }
 
 //-----------------------------------------------------------------------
@@ -205,14 +245,18 @@ function aff_principal() { ecran=1;
 function aff_second() { ecran=2; set_Aff();
 
   console.log("affichage second");
-  g.setFont("Vector",24);  g.setFontAlign(-1, 0);
-  
-  var batt=E.getBattery().toString()+ "%"; y=40; g.drawString("B:"+batt, x, y);
-  y+=30;g.drawString(" T:"+temperature, x, y);
+  g.setFont("Vector",30);  g.setFontAlign(-1, 0);
+  var batt=E.getBattery().toString()+ "%"; y=40; g.drawString(" B:"+batt, x, y);
+
+  y+=35;g.drawString(" T:"+temperature+" C", x, y);
+
   var tend;
-  if (pression-1013>=0){tend="Bo "+(pression-1013).toString();} else {tend="Mo "+(pression-1013).toString();}
+  if (pression-1013>=0){tend="Bo"+(pression-1013).toString();color_it("Bleu");} else {tend="Mo"+(pression-1013).toString(); color_it("Rouge");}
+  g.setFont("Vector",24); 
   y+=30;g.drawString("P:"+pression+" "+tend, x, y);
-  y+=30;g.drawString(" Alt:"+altitude+" m", x, y);  
+
+  g.setFont("Vector",30); color_it("Noir");
+  y+=35;g.drawString(" Alt:"+altitude+" m", x, y);  
 }
 
 //-------------------------------------------------------
