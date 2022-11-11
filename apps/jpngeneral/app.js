@@ -209,6 +209,9 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   
                           
   set_Aff();updateCalendar(); timeToNext();
+  var offset;
+  offset=0;
+  if (calen==" ") offset=24;
   //
   // --------- HEURE et MINUTE ------------------
   //
@@ -216,17 +219,19 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   var mm=new Date().getMinutes().toString(); if (mm.length==1) aff=aff+"0"; aff=aff+mm;
 
   var fond=""; var ic;
-
+  
+   // ---  FOND ------                      
   if (aff_type[altern].bg !="No") { fond=require("Storage").read(aff_type[altern].bg+".raw");
        console.log (aff_type[altern].bg+".raw",fond.length);
        g.drawImage( require("heatshrink").decompress(atob(fond)),0,0); //Bangle.drawWidgets();
        }
-
-  if (aff_type[altern].bg_l1 !="No") { color_it(aff_type[altern].bg_l1); g.fillRect (0,28,176,108); }
+  
+   // -------RECTANGLE                       
+  if (aff_type[altern].bg_l1 !="No") { color_it(aff_type[altern].bg_l1); g.fillRect (0,28+offset,176,108+offset); }
   color_it(aff_type[altern].fg_l1);
   
-   x=83;y=75;
-   if (calen==" ") y+=24;                      
+   x=83;y=75+offset;
+                        
    g.setFontAlign(0, 0).setFont("Anton").drawString(aff,x,y); 
 
   //-----------------------------------------------
