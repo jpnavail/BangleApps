@@ -96,7 +96,7 @@ function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
 
 
 //-----------------------------------------------------
-//  memoire
+//      Memoire
 // ={ free: 11908, usage: 92, total: 12000, history: 4, gc: 2, 
 // gctime: 20.263671875, blocksize: 15, stackEndAddress: 537089304, flash_start: 0,
 // flash_binary_end: 594656, flash_code_start: 1610612736, flash_length: 1048576 }}
@@ -158,11 +158,11 @@ function suite_press(data) {
   altitude=parseInt(altitude)+0;
 }
 
-//------------------------------------------------------
+
 
 var calendar = []; var current = []; var next = []; var event =[]; var titre;
 var nb_heures;var nb_minutes;
-
+//-----------------------------------------------------------------------------------------
 function updateCalendar() { 
   calendar = require("Storage").readJSON("android.calendar.json",true)||[];
   calendar = calendar.filter(e => isActive(e) || getTime() <= e.timestamp);
@@ -171,6 +171,7 @@ function updateCalendar() {
   current = calendar.filter(isActive);
   next = calendar.filter(e=>!isActive(e));
 }
+//-----------------------------------------------------------------------------------------
 
 function isActive(event) {
   var timeActive = getTime() - event.timestamp;
@@ -180,13 +181,14 @@ function isActive(event) {
 function zp(str) { return ("0"+str).substr(-2);}
 
 var chaine; var nb=10;
+//-----------------------------------------------------------------------------------------
 function limit_chaine (chaine,nb) {
   if (chaine.length !=0) { if (chaine.length>=nb+1) {chaine=chaine.substring(0,nb);} }
   return chaine;
 }
-
+//-----------------------------------------------------------------------------------------
 function timeToNext() {
-  calen=" Sans elements";var entete;
+  calen="";var entete;
   if (next.length !=0) { calen=limit_chaine(next[0].title,10);var tempo=new Date(next[0].timestamp*1000);
       var offset = 0-tempo.getTimezoneOffset()/1440;
       var days = Math.floor((tempo.getTime()/1000)/86400+offset)-Math.floor(getTime()/86400+offset);
@@ -196,13 +198,16 @@ function timeToNext() {
   } 
 }
 
-//-------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 //                AFFICHAGES 
 //-----------------------------------------------------------------------------------------
 var altern=0;
 
+//-----------------------------------------------------------------------------------------
 function aff_principal() { ecran=1; console.log("ecran 1",img.length);
-  set_Aff(); 
+  
+                          
+  set_Aff();updateCalendar(); timeToNext();
   //
   // --------- HEURE et MINUTE ------------------
   //
@@ -218,8 +223,10 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
 
   if (aff_type[altern].bg_l1 !="No") { color_it(aff_type[altern].bg_l1); g.fillRect (0,28,176,108); }
   color_it(aff_type[altern].fg_l1);
-
-  x=83;y=75; g.setFontAlign(0, 0).setFont("Anton").drawString(aff,x,y); 
+  
+   x=83;y=75;
+   if (calen=="") x+=24;                      
+   g.setFontAlign(0, 0).setFont("Anton").drawString(aff,x,y); 
 
   //-----------------------------------------------
   //       JOUR MOIS 
@@ -246,14 +253,15 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   //-----------------------------------------------
   //        LIGNE RDV A VENIR 
 
-  updateCalendar(); timeToNext();
   x=5; y+=32;
-  //   Cadre ou pas 
-  if (aff_type[altern].bg_l3 !="No") { 
-      color_it(aff_type[altern].bg_l3); g.fillRect(0,y,176,y+24);}
-  // couleur texte
-  color_it(aff_type[altern].fg_l3);
-  g.setFont("Vector",23); g.setFontAlign(-1, 0);   g.drawString(calen,x,y);
+  if (calen!="") {                        
+      //   Cadre ou pas 
+      if (aff_type[altern].bg_l3 !="No") { 
+             color_it(aff_type[altern].bg_l3); g.fillRect(0,y,176,y+24);}
+      // couleur texte
+      color_it(aff_type[altern].fg_l3);
+      g.setFont("Vector",23); g.setFontAlign(-1, 0);   g.drawString(calen,x,y);
+  }
 
   // Vibrations en amont du RDV
   if ((nb_heures==1) && (nb_minutes==0)) {Bangle.buzz(2000);}
