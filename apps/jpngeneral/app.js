@@ -186,9 +186,10 @@ function limit_chaine (chaine,nb) {
   if (chaine.length !=0) { if (chaine.length>=nb+1) {chaine=chaine.substring(0,nb);} }
   return chaine;
 }
+var calen;
 //-----------------------------------------------------------------------------------------
 function timeToNext() {
-  calen="";var entete;
+  calen=" ";var entete;
   if (next.length !=0) { calen=limit_chaine(next[0].title,10);var tempo=new Date(next[0].timestamp*1000);
       var offset = 0-tempo.getTimezoneOffset()/1440;
       var days = Math.floor((tempo.getTime()/1000)/86400+offset)-Math.floor(getTime()/86400+offset);
@@ -225,7 +226,7 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   color_it(aff_type[altern].fg_l1);
   
    x=83;y=75;
-   if (calen=="") y+=24;                      
+   if (calen==" ") y+=24;                      
    g.setFontAlign(0, 0).setFont("Anton").drawString(aff,x,y); 
 
   //-----------------------------------------------
@@ -254,7 +255,7 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   //        LIGNE RDV A VENIR 
 
   x=5; y+=32;
-  if (calen!="") {                        
+  if (calen!=" ") {                        
       //   Cadre ou pas 
       if (aff_type[altern].bg_l3 !="No") { 
              color_it(aff_type[altern].bg_l3); g.fillRect(0,y,176,y+24);}
