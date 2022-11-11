@@ -225,7 +225,7 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   color_it(aff_type[altern].fg_l1);
   
    x=83;y=75;
-   if (calen=="") x+=24;                      
+   if (calen=="") y+=24;                      
    g.setFontAlign(0, 0).setFont("Anton").drawString(aff,x,y); 
 
   //-----------------------------------------------
