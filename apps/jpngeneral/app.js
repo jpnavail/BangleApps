@@ -44,9 +44,9 @@ aff_type=[
   { "bg":"colioure","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Bleu_fonce","bg_l3":"No","fg_l3":"Blanc"},
   { "bg":"fd_bg_cal","bg_l1":"Rouge","fg_l1":"Blanc","bg_l2":"No","fg_l2":"Noir","bg_l3":"No","fg_l3":"Noir"},
   { "bg":"terre","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Blanc"},
-  { "bg":"fd_bg_mult","bg_l1":"No","fg_l1":"Orange","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
+  { "bg":"fd_bg_mult","bg_l1":"No","fg_l1":"Noir","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
   { "bg":"montagne","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Noir"},
-  { "bg":"fd_bg_eau","bg_l1":"No","fg_l1":"Vert_jaune","bg_l2":"No","fg_l2":"Vert_jaune","bg_l3":"No","fg_l3":"Vert_jaune"},
+  {   "bg":"fd_bg_eau","bg_l1":"No","fg_l1":"Vert_jaune","bg_l2":"No","fg_l2":"Vert_jaune","bg_l3":"No","fg_l3":"Vert_jaune"},
   ];
 
 // Momo
@@ -93,7 +93,7 @@ function Tsleep_Led(ms,led,etat) {   var change=0; var ok=0; var debut; var main
 //-------FCT -AFFICHAGES ----------------
 function set_Aff() { g.clearRect(0,0,176,176); Bangle.drawWidgets(); g.setFontAlign(0,0); g.setFont("Vector",40); g.setColor(0,0,0);}
 
-function color_it(c_champ) { var ic; gsetColor("0x000F");for (ic in couleur ) {if (c_champ == couleur[ic].nom) 
+function color_it(c_champ) { var ic; g.setColor(Number("0x000F"));for (ic in couleur ) {if (c_champ == couleur[ic].nom) 
  { g.setColor(Number(couleur[ic].valeur));ic=couleur.length;} }}
 
 function lit_fic (i) { console.log(fic=fic_img[i]+".raw","Lecture"); img=require("Storage").read(fic=fic_img[i]+".raw"); console.log(img.length);lit_img=1;return(img); }
@@ -104,29 +104,19 @@ function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
 
 
 //-----------------------------------------------------
-//      Memoire
+//      Memoire = pack 
 // ={ free: 11908, usage: 92, total: 12000, history: 4, gc: 2, 
 // gctime: 20.263671875, blocksize: 15, stackEndAddress: 537089304, flash_start: 0,
 // flash_binary_end: 594656, flash_code_start: 1610612736, flash_length: 1048576 }}
 var imp_util=["","","",""];
-var mem_util=["","","",""];
-var anc_util=["","","",""];
+// -------
 function ressource() {
-  var i=0;
-  while (i!=4) {anc_util[i]=mem_util[i];i +=1;}
   var pack=process.memory(true);
   var bloc=parseInt(pack.blocksize);
-
-  mem_util[0]=Math.floor(parseInt(pack.free)*bloc/1000).toString();
-  imp_util[0]="M Libre: "+mem_util[0]+" k / "+anc_util[0];
-  mem_util[1]=Math.floor(parseInt(pack.usage)*bloc/1000).toString();
-  imp_util[1]="M utili: "+mem_util[1]+" k / "+anc_util[1];
-  mem_util[2]=Math.floor(parseInt(pack.total)*bloc/1000).toString();
-  imp_util[2]="M Total: "+mem_util[2]+" k / "+anc_util[2];
-  mem_util[3]=Math.floor(parseInt(pack.flash_length)*bloc/1000).toString();
-  imp_util[3]="M Flash: "+mem_util[3]+" k / "+anc_util[3];
+  imp_util[0]="M Libre: "+Math.floor(parseInt(pack.free)*bloc/1000).toString()+" k";
+  imp_util[1]="M utili: "+Math.floor(parseInt(pack.usage)*bloc/1000).toString()+" k";
   console.log(imp_util);
-  return (imp_util,mem_util,anc_util);
+  return (imp_util);
 }
 
 //-------------------------------------------------------
@@ -165,8 +155,6 @@ function suite_press(data) {
   
   altitude=parseInt(altitude)+0;
 }
-
-
 
 var calendar = []; var current = []; var next = []; var event =[]; var titre;
 var nb_heures;var nb_minutes;
@@ -214,8 +202,7 @@ var altern=0;
 
 //-----------------------------------------------------------------------------------------
 function aff_principal() { ecran=1; console.log("ecran 1",img.length);
-  
-                          
+
   set_Aff();updateCalendar(); timeToNext();
   var offset;
   offset=0;
@@ -227,19 +214,19 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   var mm=new Date().getMinutes().toString(); if (mm.length==1) aff=aff+"0"; aff=aff+mm;
 
   var fond=""; var ic;
-  
+
    // ---  FOND ------                      
   if (aff_type[altern].bg !="No") { fond=require("Storage").read(aff_type[altern].bg+".raw");
        console.log (aff_type[altern].bg+".raw",fond.length);
-       g.drawImage( require("heatshrink").decompress(atob(fond)),0,0); //Bangle.drawWidgets();
+       g.drawImage( require("heatshrink").decompress(atob(fond)),0,0);           //Bangle.drawWidgets();
        }
-  
-   // -------RECTANGLE                       
+
+   // -------RECTANGLE
   if (aff_type[altern].bg_l1 !="No") { color_it(aff_type[altern].bg_l1); g.fillRect (0,28+offset,176,108+offset); }
   color_it(aff_type[altern].fg_l1);
-  
+
    x=83;y=75+offset;
-                        
+
    g.setFontAlign(0, 0).setFont("Anton").drawString(aff,x,y); 
 
   //-----------------------------------------------
@@ -263,7 +250,7 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   dateStr=jourMois+"    ";  g.setFont("Vector",40); g.drawString(dateStr,x,y);
   x+=6; y+=0;
   dateStr=mois.toUpperCase(); g.setFont("8x12",3); g.drawString(dateStr,x,y);
-  
+
   //-----------------------------------------------
   //        LIGNE RDV A VENIR 
 
@@ -275,25 +262,26 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
       // couleur texte
       color_it(aff_type[altern].fg_l3);
       g.setFont("Vector",23); g.setFontAlign(-1, 0);   g.drawString(calen,x,y);
+
+      // Vibrations en amont du RDV
+      if ((nb_heures==1) && (nb_minutes==0)) {Bangle.buzz(2000);}
+      if ((nb_heures==0) && (nb_minutes==30)) {Bangle.buzz(2000);Tsleep(1000);Bangle.buzz(1000);}
+      if ((nb_heures==0) && (nb_minutes==10)) {i=0; while(i<4) { Bangle.buzz(500);Tsleep(500);i+=1;} }
   }
 
-  // Vibrations en amont du RDV
-  if ((nb_heures==1) && (nb_minutes==0)) {Bangle.buzz(2000);}
-  if ((nb_heures==0) && (nb_minutes==30)) {Bangle.buzz(2000); Tsleep(1000);Bangle.buzz(1000);}
-  if ((nb_heures==0) && (nb_minutes==10)) {i=0; while(i<4) { Bangle.buzz(500);Tsleep(500);i+=1;} }
+  //  ----  generiques
+  acqui_press();
+  if (lit_img==0) img=lit_fic(0);
 
   // Passage au style suivant 
   altern +=1;if (altern>=aff_type.length) altern=0;
   console.log(altern);
-  //  ----  generiques
-  acqui_press();
-  if (lit_img==0) img=lit_fic(0);
 }
 
 //--------------  PAGE DES DONNEES ------------------------------------------------
 
 function aff_second() { ecran=2; set_Aff();
-  Haut=22;var inc=0;
+  Haut=24;var inc=0;
   console.log("affichage second");
   g.setFont("Vector",Haut);  g.setFontAlign(-1, 0);
 
@@ -453,7 +441,6 @@ Bangle.setBarometerPower(true);
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
 
 general ();
-
 
 // Register hooks for LCD on/off event and screen lock on/off event
 //Bangle.on('lcdPower', on => {   general(); });
