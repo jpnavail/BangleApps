@@ -44,9 +44,9 @@ aff_type=[
   { "bg":"colioure","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Bleu_fonce","bg_l3":"No","fg_l3":"Blanc"},
   { "bg":"fd_bg_cal","bg_l1":"Rouge","fg_l1":"Blanc","bg_l2":"No","fg_l2":"Noir","bg_l3":"No","fg_l3":"Noir"},
   { "bg":"terre","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Blanc"},
-  { "bg":"fg_bg_mult","bg_l1":"No","fg_l1":"Orange","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
+  { "bg":"fd_bg_mult","bg_l1":"No","fg_l1":"Orange","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
   { "bg":"montagne","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Noir"},
-  { "bg":"fg_bg_eau","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Bleu_fonce"},
+  { "bg":"fd_bg_eau","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Bleu_fonce"},
   ];
 
 // Momo
@@ -297,7 +297,7 @@ function aff_second() { ecran=2; set_Aff();
   console.log("affichage second");
   g.setFont("Vector",Haut);  g.setFontAlign(-1, 0);
 
-  x=10; y=24+inc;
+  x=10; y=36+inc;
 
   var batt=E.getBattery().toString()+ " %";g.drawString(" Batt: "+batt, x, y);
   y+=Haut+inc;
@@ -314,7 +314,7 @@ function aff_second() { ecran=2; set_Aff();
   //imp_util,mem_util,anc_util=
   ressource();
   var i=0;
-  while(i!=3) {console.log(i, imp_util[i]);
+  while(i!=2) {console.log(i, imp_util[i]);
                     g.drawString(imp_util[i].substring(0,14),x,y);y+=Haut+inc;i +=1;}
 
 }
