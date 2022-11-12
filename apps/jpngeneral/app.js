@@ -296,6 +296,7 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
   // Passage au style suivant 
   altern +=1;if (altern>=aff_type.length) altern=0;
   console.log(altern);
+  balai();
 }
 
 //--------------  PAGE DES DONNEES ------------------------------------------------
@@ -325,6 +326,7 @@ function aff_second() { ecran=2; set_Aff();
   while(i!=2) {console.log(i, imp_util[i]);
                     g.drawString(imp_util[i].substring(0,14),x,y);y+=Haut+inc;i +=1;}
 
+  balai();
 }
 
 
@@ -393,6 +395,7 @@ function aff_agenda() { ecran=3;set_Aff();
   g.setFontAlign(-1, 0); g.clearRect(5,24,g.getWidth()-5,g.getHeight());
   updateCalendar();
   y = 33;  y = drawCurrentEvents(y); drawFutureEvents(y);
+  balai();
 }
 //-----------------------------------
 
@@ -402,6 +405,7 @@ function aff_momo() { ecran=4;console.log(" Diaporama :",ecran,k);
      img=lit_fic(k); D_ecran(img,0,24); k +=1; 
      if (k==(fic_img.len)+1) {k=0; clearTimeout(tp_momo);lit_img=0;}
      else {clearTimeout(tp_momo);tp_momo=setTimeout(aff_momo,5000);}
+     balai();
 }
 
 //-----------------------------------------------------------------------
@@ -460,7 +464,6 @@ Bangle.setBarometerPower(true);
 Bangle.setOptions({wakeOnTouch:true});
 
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
-balai();
 
 general ();
 
