@@ -407,7 +407,7 @@ var diap=0;
 function aff_momo() { ecran=4;console.log(" Diaporama :",ecran,diap);
      img=lit_fic(diap); D_ecran(img,0,24); diap +=1; 
      if (diap==fic_img.length) {diap=0; clearTimeout(tp_momo);lit_img=0;}
-     else {clearTimeout(tp_momo);tp_momo=setTimeout(aff_momo,5000);}
+     else {clearTimeout(tp_momo);tp_momo=setTimeout(aff_momo,7000);}
      balai();
 }
 
