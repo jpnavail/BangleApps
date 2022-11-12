@@ -45,8 +45,8 @@ aff_type=[
   { "bg":"fd_bg_cal","bg_l1":"Rouge","fg_l1":"Blanc","bg_l2":"No","fg_l2":"Noir","bg_l3":"No","fg_l3":"Noir"},
   { "bg":"terre","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Blanc"},
   { "bg":"fd_bg_mult","bg_l1":"No","fg_l1":"Orange","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
-  { "bg":"montagne","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Noir"},
-  { "bg":"fd_bg_eau","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Bleu_fonce"},
+  { "bg":"montagne","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Noir"},
+  { "bg":"fd_bg_eau","bg_l1":"No","fg_l1":"Vrt_jaune","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Bleu_fonce"},
   ];
 
 // Momo
@@ -93,7 +93,7 @@ function Tsleep_Led(ms,led,etat) {   var change=0; var ok=0; var debut; var main
 //-------FCT -AFFICHAGES ----------------
 function set_Aff() { g.clearRect(0,0,176,176); Bangle.drawWidgets(); g.setFontAlign(0,0); g.setFont("Vector",40); g.setColor(0,0,0);}
 
-function color_it(c_champ) { var ic; for (ic in couleur ) {if (c_champ == couleur[ic].nom) 
+function color_it(c_champ) { var ic; gsetColor("0x000F");for (ic in couleur ) {if (c_champ == couleur[ic].nom) 
  { g.setColor(Number(couleur[ic].valeur));ic=couleur.length;} }}
 
 function lit_fic (i) { console.log(fic=fic_img[i]+".raw","Lecture"); img=require("Storage").read(fic=fic_img[i]+".raw"); console.log(img.length);lit_img=1;return(img); }
