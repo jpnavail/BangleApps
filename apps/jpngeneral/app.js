@@ -106,6 +106,8 @@ function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
 //  ---------------
 var SD;
 function balai() { print ("suis la");
+    SD="";
+    Bangle.setUI("clock");
     Bangle.on ('tap', function(data)
                {print(data.double); Bangle.setLCDPower(true);});
     Bangle.on ('swipe', function(LR,UD) { SD="";
@@ -221,7 +223,7 @@ function timeToNext() {
 var altern=0;
 
 //-----------------------------------------------------------------------------------------
-function aff_principal() { ecran=1; console.log("ecran 1",img.length);
+function aff_principal() { ecran=1; console.log("ecran 1");
 
   set_Aff();updateCalendar(); timeToNext();
   var offset;
@@ -397,15 +399,15 @@ function aff_agenda() { ecran=3;set_Aff();
   y = 33;  y = drawCurrentEvents(y); drawFutureEvents(y);
   balai();
 }
-//-----------------------------------
-
-var k=0;
+//--------------------------------------------------------------------------
+//                     DIAPORAMA 
+//
+var diap=0;
 // ---------------
-function aff_momo() { ecran=4;console.log(" Diaporama :",ecran,k);
-     img=lit_fic(k); D_ecran(img,0,24); k +=1; 
-     if (k==(fic_img.len)+1) {k=0; clearTimeout(tp_momo);lit_img=0;}
+function aff_momo() { ecran=4;console.log(" Diaporama :",ecran,diap);
+     img=lit_fic(diap); D_ecran(img,0,24); diap +=1; 
+     if (diap==fic_img.length) {diap=0; clearTimeout(tp_momo);lit_img=0;}
      else {clearTimeout(tp_momo);tp_momo=setTimeout(aff_momo,5000);}
-     sd="";
      balai();
 }
 
