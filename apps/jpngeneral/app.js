@@ -1,3 +1,8 @@
+//-----------------------------------------------------------------
+//       PROGRAMME  JPN GENERAL 
+//------------------------------------------------------------------
+
+// -------------   CHARGEMENT FICHIERS  FONTS 
 require("Font8x12").add(Graphics);
 
 var Anton;Anton=require("Storage").read("P_Anton.raw");
@@ -32,16 +37,19 @@ var couleur=[
   {"code":"19","nom":"Cyan","valeur":"0x07FF"},
    ];
 
-aff_type=[
+//  Type affichage : Fichier Fond / No ,
+//  xx : 1 HH:MM, 2/ Date  3 :Ligne =>  bg:rectange/No , couleur fg : coul texte
+
+aff_type=[ 
   { "bg":"colioure","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Bleu_fonce","bg_l3":"No","fg_l3":"Blanc"},
-  { "bg":"No","bg_l1":"Rouge","fg_l1":"Blanc","bg_l2":"No","fg_l2":"Noir","bg_l3":"No","fg_l3":"Noir"},
+  { "bg":"fd_bg_cal","bg_l1":"Rouge","fg_l1":"Blanc","bg_l2":"No","fg_l2":"Noir","bg_l3":"No","fg_l3":"Noir"},
   { "bg":"terre","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Blanc"},
-  { "bg":"No","bg_l1":"Noir","fg_l1":"Orange","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
+  { "bg":"fg_bg_mult","bg_l1":"Noir","fg_l1":"Orange","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
   { "bg":"montagne","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Noir"},
-  { "bg":"No","bg_l1":"Orange","fg_l1":"Bleu","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Bleu_fonce"},
+  { "bg":"fg_bg_eau","bg_l1":"no","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Bleu_fonce"},
   ];
 
-
+// Momo
 var fic_img=["mote2","mote3","moto2"];
 
 //-----------------------------------------------------------------------
