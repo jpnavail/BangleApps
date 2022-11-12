@@ -302,7 +302,7 @@ function aff_principal() { ecran=1; console.log("ecran 1",img.length);
 //--------------  PAGE DES DONNEES ------------------------------------------------
 
 function aff_second() { ecran=2; set_Aff();
-  Haut=24;var inc=0;
+  Haut=22;var inc=0;
   console.log("affichage second");
   g.setFont("Vector",Haut);  g.setFontAlign(-1, 0);
 
@@ -405,6 +405,7 @@ function aff_momo() { ecran=4;console.log(" Diaporama :",ecran,k);
      img=lit_fic(k); D_ecran(img,0,24); k +=1; 
      if (k==(fic_img.len)+1) {k=0; clearTimeout(tp_momo);lit_img=0;}
      else {clearTimeout(tp_momo);tp_momo=setTimeout(aff_momo,5000);}
+     sd="";
      balai();
 }
 
@@ -422,7 +423,8 @@ function aiguillage (){
   else { if (ecran==2) { aff_agenda();} 
          else { if (ecran==3) { tp_momo=setTimeout(aff_momo,5000);aff_momo(); }
                 else { // Show launcher when middle button press
-                       Bangle.setUI("clock"); }
+                       Bangle.setUI("clock"); 
+                       if (SD!="") aff_principal(); }
               }
        }
 }
