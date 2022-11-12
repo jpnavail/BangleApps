@@ -437,7 +437,7 @@ function general() {
 Bangle.loadWidgets();
 
 Bangle.setBarometerPower(true);
-Bangle.setOptions({wakeOnTouch:true});
+//Bangle.setOptions({wakeOnTouch:true});
 
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
 
