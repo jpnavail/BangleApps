@@ -102,6 +102,26 @@ function D_ecran(img,x,y) {g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y)
 
 function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
 
+//  ----------------   Fonctions Touch screen 
+//  ---------------
+var SD;
+function balai() { print ("suis la");
+    Bangle.on ('tap', function(data)
+               {print(data.double); Bangle.setLCDPower(true);});
+    Bangle.on ('swipe', function(LR,UD) { SD="";
+      if (LR==-1) {SD="G";} else 
+          {if (LR==1) {SD="D";}  else {if (UD==-1){SD=SD+"H";} else {if (UD==1){SD=SD+"B";}} }
+          }
+      print (SD);sans_fct(); return(SD); });
+}
+
+//-----------------------------------------------
+function sans_fct() { print("sorti");
+                      //Bangle.removeListener('tap');
+                      Bangle.removeAllListeners();
+                      aiguillage();
+}
+
 
 //-----------------------------------------------------
 //      Memoire = pack 
@@ -440,6 +460,7 @@ Bangle.setBarometerPower(true);
 Bangle.setOptions({wakeOnTouch:true});
 
 setWatch(aiguillage ,BTN1,{edge:"rising", debounce:30, repeat:true});
+balai();
 
 general ();
 
