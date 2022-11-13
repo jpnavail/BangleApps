@@ -49,9 +49,6 @@ aff_type=[
   {   "bg":"fd_bg_eau","bg_l1":"No","fg_l1":"Rouge","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Rouge"},
   ];
 
-// Momo
-var fic_img=["mote2","mote3","moto2"];
-
 //-----------------------------------------------------------------------
 //                VARIABLES  GENERALES
 //-----------------------------------------------------------------------
@@ -403,12 +400,13 @@ function aff_agenda() { ecran=3;set_Aff();
 //                     DIAPORAMA 
 //
 var diap=0;
+var fic_img=["mote2","mote3","moto2"];
 // ---------------
 function aff_momo() { ecran=4;console.log(" Diaporama :",ecran,diap);
-     img=lit_fic(diap); D_ecran(img,0,24); diap +=1; 
-     if (diap==fic_img.length) {diap=0; clearTimeout(tp_momo);lit_img=0;}
-     else {clearTimeout(tp_momo);tp_momo=setTimeout(aff_momo,7000);}
-     balai();
+  clearTimeout(tp_momo);
+  if (diap==fic_img.length) {diap=0;lit_img=0;aff_principal();} //fini
+  else {
+  img=lit_fic(diap); D_ecran(img,0,24); diap +=1;tp_momo=setTimeout(aff_momo,7000);balai();}
 }
 
 //-----------------------------------------------------------------------
