@@ -46,7 +46,7 @@ aff_type=[
   { "bg":"terre","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Blanc"},
   { "bg":"fd_bg_mult","bg_l1":"No","fg_l1":"Noir","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
   { "bg":"montagne","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Noir"},
-  { "bg":"fd_bg_eau","bg_l1":"No","fg_l1":"Rouge","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Rouge"},
+  { "bg":"fd_bg_eau","bg_l1":"No","fg_l1":"Magenta","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Magenta"},
   ];
 
 //-----------------------------------------------------------------------
@@ -409,17 +409,16 @@ function aff_second() {
 //-------------------------------------------------------
 //                 3/ ECRAN AGENDA 
 
-
 var inter = 0;
 
 function drawEventHeader(event, y) {
-  Haut = 24;
+  Haut = 22;
   g.setFont("Vector", Haut);
 
   var time = isActive(event) ? new Date() : new Date(event.timestamp * 1000);
   var timeStr = zp(time.getHours()) + ":" + zp(time.getMinutes());
 
-  y += 0;
+  y += 2;
   x = 5;
 
   if (isActive(event)) {
@@ -439,7 +438,7 @@ function drawEventHeader(event, y) {
 }
 
 function drawEventBody(titre, y) {
-  x = 3;
+  x = 3;  
   g.setFont("Vector", Haut);
   if (titre != "") {
     g.drawString(titre, x, y);
@@ -457,8 +456,8 @@ function drawEvent(event, titre, y) {
 var curEventHeight = 0;
 
 function drawCurrentEvents(y) {
-
-  g.setColor(0, 0, 1);
+  
+  g.setColor(0,0,1);
   g.clearRect(5, y, g.getWidth() - 5, y + curEventHeight);
   curEventHeight = y;
 
@@ -478,7 +477,7 @@ function drawCurrentEvents(y) {
 }
 
 function drawFutureEvents(y) {
-  g.setColor(g.theme.fg);
+  g.setColor(0,0,0);
   for (event of next) {
     console.log("futur");
     titre = limit_chaine(event.title, 10);
