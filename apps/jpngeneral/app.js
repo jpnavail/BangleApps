@@ -559,10 +559,16 @@ function aiguillage() {
   // Pour arreter Tsleep 
   boutton = 1;
   setWatch(aiguillage, BTN1, {edge: "rising",debounce: 30,repeat: true });
+  
+  if (tp_momo) clearTimeout(tp_momo);
+  if (counterInterval) 
+     { clearTimeout(CounterInterval);
+       counterInterval = setInterval(aff_principal, rafraichi * 1000);}
+  
   var proch=ecran;
   if (SD=="D") proch=ecran+1;
   if (SD=="G") proch=ecran-1;
-  if (tp_momo) clearTimeout(tp_momo);
+
   if (proch <=1 || proch > 4) {diap = 0;lit_img = 0;aff_principal();}
   if (proch == 2) aff_second();
   if (proch == 3) aff_agenda();
