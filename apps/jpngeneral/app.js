@@ -525,26 +525,29 @@ function aff_momo() {
 //--------------------                -----------------------------------
 
 //  ----------------   Fonctions Touch screen 
-var SD;
+var SD=""; var LR=0;var UD=0; var balai_set=0;
 
 function balai() {
-  print("suis la");
-  SD = "";
+
+  if (balai_set==1) return;
+  balai_set=1;  print(">> ----- suis la");
   Bangle.setUI("clock");
   Bangle.on('tap', function(data) {
     print(data.double);
     Bangle.setLCDPower(true);
   });
+  SD = "";LR=0;UD=0; 
   Bangle.on('swipe', function(LR, UD) {
-    SD = "";
     if (LR == -1) {SD = "G";} else {if (LR == 1) {SD = "D";} 
                                     else {if (UD == -1) {SD = SD + "H";} 
                                           else {if (UD == 1) {SD = SD + "B";}   }
                                           }
                                     }
     print(SD);
-    Bangle.removeAllListeners();
+    Bangle.removeAllListeners('tap');
+    Bangle.removeAllListeners('swipe');
     print("sortie");
+    balai_set=0;
     aiguillage();
  });
 }
