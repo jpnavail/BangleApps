@@ -564,9 +564,7 @@ function aiguillage() {
   if (tp_momo) clearTimeout(tp_momo);
   if (Inter_page) clearTimeout(Inter_page);
   Inter_page = setInterval(aff_principal, rafraichi * 1000);
-  if (Momo_regular) clearTimeout(Momo_regular);
-  Momo_regular= setInterval(aff_momoregular, inter_momo);
-  
+
   var proch=ecran;
   if (SD=="D") proch=ecran+1;
   if (SD=="G") proch=ecran-1;
@@ -606,6 +604,8 @@ if ((0, 5 * rafraichi) >= laps) {
 }
 inter_momo = ((nbaffpr_momo * rafraichi) - moins_tps) * 1000;
 
+if (!Momo_regular) 
+  Momo_regular= setInterval(aff_momoregular, inter_momo);
 
 //------------------
 ecran = 0;
