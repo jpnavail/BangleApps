@@ -562,6 +562,7 @@ function aiguillage() {
   var proch=ecran;
   if (SD=="D") proch=ecran+1;
   if (SD=="G") proch=ecran-1;
+  clearTimeout(tp_momo);
   if (proch <=1 || proch > 4) {diap = 0;lit_img = 0;aff_principal();}
   if (proch == 2) aff_second();
   if (proch == 3) aff_agenda();
