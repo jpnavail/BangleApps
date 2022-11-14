@@ -52,7 +52,7 @@ aff_type=[
 //-----------------------------------------------------------------------
 //                VARIABLES  GENERALES
 //-----------------------------------------------------------------------
-var counterInterval; var momoregular;var boutton;
+var boutton;
 var x = g.getWidth() / 2; var y = g.getHeight() / 2; var Haut=24;
 var img="";var fic; var T;
 var lit_img=0;
@@ -510,7 +510,7 @@ function aff_agenda() {
 //
 var diap = 0;
 var fic_img = ["mote2", "mote3", "moto2"];
-var tp_momo;
+
 // ---------------
 function aff_momo() {
   ecran = 4;
@@ -553,6 +553,7 @@ function balai() {
 }
 
 //-----------------------------------------------
+var Inter_page;var tp_momo; var Momo_regular;
 
 function aiguillage() {
   console.log("Boutton/swipe");
@@ -561,9 +562,10 @@ function aiguillage() {
   setWatch(aiguillage, BTN1, {edge: "rising",debounce: 30,repeat: true });
   
   if (tp_momo) clearTimeout(tp_momo);
-  if (counterInterval) 
-     { clearTimeout(CounterInterval);
-       counterInterval = setInterval(aff_principal, rafraichi * 1000);}
+  if (Inter_page) clearTimeout(Inter_page);
+  Inter_page = setInterval(aff_principal, rafraichi * 1000);
+  if (!momoregular) clearTimeout(Momo_regular);
+  Momo_regular= setInterval(aff_momoregular, inter_momo);
   
   var proch=ecran;
   if (SD=="D") proch=ecran+1;
@@ -578,7 +580,7 @@ function aiguillage() {
 
 //--------------------     MAIN           -----------------------------------
 
-setTimeout(aiguillage, 5000);
+//setTimeout(aiguillage, 5000);
 
 // Load widgets
 Bangle.loadWidgets();
@@ -604,11 +606,6 @@ if ((0, 5 * rafraichi) >= laps) {
 }
 inter_momo = ((nbaffpr_momo * rafraichi) - moins_tps) * 1000;
 
-if (!momoregular)
-  momoregular = setInterval(aff_momoregular, inter_momo);
-
-if (!counterInterval)
-  counterInterval = setInterval(aff_principal, rafraichi * 1000);
 
 //------------------
 ecran = 0;
