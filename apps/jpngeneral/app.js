@@ -419,7 +419,7 @@ function drawEventHeader(event, y) {
   var timeStr = zp(time.getHours()) + ":" + zp(time.getMinutes());
 
   y += 2;
-  x = 5;
+  x = 2;
 
   if (isActive(event)) {
     g.drawString(zp(time.getDate()) + "." + require("locale").month(time, 1), x, y);
@@ -427,7 +427,6 @@ function drawEventHeader(event, y) {
     var offset = 0 - time.getTimezoneOffset() / 1440;
     var days = Math.floor((time.getTime() / 1000) / 86400 + offset) - Math.floor(getTime() / 86400 + offset);
     if (days > 0) {
-      //g.setFont("Vector", 24);
       var daysStr = days === 1 ? /*LANG*/ "Demain" : /*LANG*/ "J+" + days + " ";
       g.drawString(daysStr, x, y);
     }
@@ -438,8 +437,7 @@ function drawEventHeader(event, y) {
 }
 
 function drawEventBody(titre, y) {
-  x = 3;  
-  g.setFont("Vector", Haut);
+  x = 2;  
   if (titre != "") {
     g.drawString(titre, x, y);
     y += Haut + inter;
@@ -477,6 +475,7 @@ function drawCurrentEvents(y) {
 }
 
 function drawFutureEvents(y) {
+
   g.setColor(0,0,0);
   for (event of next) {
     console.log("futur");
