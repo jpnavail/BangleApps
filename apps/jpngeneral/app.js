@@ -455,12 +455,11 @@ var curEventHeight = 0;
 
 function drawCurrentEvents(y) {
   
-  g.setColor(0,0,1);
-  g.clearRect(5, y, g.getWidth() - 5, y + curEventHeight);
+  //g.clearRect(5, y, g.getWidth() - 5, y + curEventHeight);
   curEventHeight = y;
 
   if (current.length === 0) {
-    titre = "";
+    titre = "";g.setColor(1,0,0);console.log("bleu");
     console.log("premiere ligne");
   } else {
     y = drawEventHeader(current[0], y);
@@ -475,12 +474,12 @@ function drawCurrentEvents(y) {
 }
 
 function drawFutureEvents(y) {
-
-  g.setColor(0,0,0);
-  for (event of next) {
+    //g.setColor(0,0,0);console.log("noir");
+    for (event of next) {
     console.log("futur");
     titre = limit_chaine(event.title, 10);
     y = drawEvent(event, titre, y);
+    g.setColor(0,0,0);
     if (y > g.getHeight()) break;
   }
   return y;
