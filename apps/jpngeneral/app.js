@@ -312,8 +312,9 @@ function aff_principal() {
   //-----------------------------------------------
   //        LIGNE RDV A VENIR 
 
-  x = 5;
+  x = 2;
   y += 32;
+  g.setFont("Vector", 22);
   if (calen != " ") {
     //   Cadre ou pas 
     if (aff_type[altern].bg_l3 != "No") {
@@ -322,7 +323,6 @@ function aff_principal() {
     }
     // couleur texte
     color_it(aff_type[altern].fg_l3);
-    g.setFont("Vector", 23);
     g.setFontAlign(-1, 0);
     g.drawString(calen, x, y);
 
