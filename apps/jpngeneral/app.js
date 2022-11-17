@@ -57,10 +57,21 @@ var x = g.getWidth() / 2; var y = g.getHeight() / 2; var Haut=24;
 var img="";var fic; var T;
 var lit_img=0;
 var timeout;
+
+
+var calendar = []; var current = []; var next = [];
+var courant=[]; var suivant=[];
+var sortie ={};
+var  d_jour=24*60*60*1000;
+var now = new Date();
+var event={};var ligne_premier="";var inter = 0;
+
 //-----------------------------------------------------------------------
 //                FONCTIONS UTILITAIRES
 //-----------------------------------------------------------------------
-function Tsleep(ms) { var ok="0"; var debut;var maintenant;
+function Tsleep(ms) 
+
+{ var ok="0"; var debut;var maintenant;
   console.log("----");
   debut=Date.now(); while (ok=="0") { 
   if (boutton ==1 ) {ok="1"; boutton=0;} else{maintenant=Date.now(); if(maintenant-debut <= ms) {ok="0";} else {ok="1";} }
@@ -68,11 +79,14 @@ function Tsleep(ms) { var ok="0"; var debut;var maintenant;
 }
 
 function Sleep (s){ var nb;
+                   
   if (Math.floor(s)!=0) { for (nb=1;nb<=Math.floor(s);nb++) {Tsleep(1000);} }
   nb=Math.floor(s)-s; console.log (nb); if(nb!=0) { Tsleep(nb); }
 }
 
-function Tsleep_Led(ms,led,etat) {   var change=0; var ok=0; var debut; var maintenant;
+function Tsleep_Led(ms,led,etat) 
+
+{   var change=0; var ok=0; var debut; var maintenant;
   debut=Date.now();
   while (ok==0) {
      // TEST FIN
@@ -88,14 +102,23 @@ function Tsleep_Led(ms,led,etat) {   var change=0; var ok=0; var debut; var main
   
 //--------------------------------------
 //-------FCT -AFFICHAGES ----------------
-function set_Aff() { g.clearRect(0,0,176,176); Bangle.drawWidgets(); g.setFontAlign(0,0); g.setFont("Vector",40); g.setColor(0,0,0);}
+function set_Aff() 
 
-function color_it(c_champ) { var ic; g.setColor(Number("0x000F"));for (ic in couleur ) {if (c_champ == couleur[ic].nom) 
+{ g.clearRect(0,0,176,176); Bangle.drawWidgets(); 
+  g.setFontAlign(0,0); g.setFont("Vector",40); g.setColor(0,0,0);}
+
+function color_it(c_champ) 
+
+{ var ic; g.setColor(Number("0x000F"));for (ic in couleur ) {if (c_champ == couleur[ic].nom) 
  { g.setColor(Number(couleur[ic].valeur));ic=couleur.length;} }}
 
-function lit_fic (i) { console.log(fic=fic_img[i]+".raw","Lecture"); img=require("Storage").read(fic=fic_img[i]+".raw"); console.log(img.length);lit_img=1;return(img); }
+function lit_fic (i) 
 
-function D_ecran(img,x,y) {g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y);Bangle.drawWidgets();console.log("xx");}
+{ console.log(fic=fic_img[i]+".raw","Lecture"); img=require("Storage").read(fic=fic_img[i]+".raw"); console.log(img.length);lit_img=1;return(img); }
+
+function D_ecran(img,x,y) 
+
+{g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y);Bangle.drawWidgets();console.log("xx");}
 
 function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
 
@@ -106,7 +129,9 @@ function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
 // flash_binary_end: 594656, flash_code_start: 1610612736, flash_length: 1048576 }}
 var imp_util = ["", "", "", ""];
 // -------
-function ressource() {
+function ressource() 
+
+{
   var pack = process.memory(true);
   var bloc = parseInt(pack.blocksize);
   imp_util[0] = "M Libre: " + Math.floor(parseInt(pack.free) * bloc / 1000).toString() + " k";
@@ -121,15 +146,17 @@ function ressource() {
 var history_T = []; var history_P = []; var history_A = [];
 var temperature; var pression; var altitude; var data;
 
-function acqui_press() {
-  Bangle.getPressure().then(data => {
+function acqui_press() 
+
+{ Bangle.getPressure().then(data => {
     suite_press(data);
   });
 }
 
 //------------------------------
-function suite_press(data) {
-  var temp = data.temperature; var rect_temp = -6.5;
+function suite_press(data) 
+
+{ var temp = data.temperature; var rect_temp = -6.5;
   var press = data.pressure;  var rect_press = 0;
   var alti = data.altitude;  var rect_alti = 62;
 
@@ -165,59 +192,103 @@ function suite_press(data) {
   altitude = parseInt(altitude) + 0;
 }
 
-var calendar = []; var current = []; var next = []; var event = [];
-var titre; var nb_heures; var nb_minutes;
-//-----------------------------------------------------------------------------------------
-function updateCalendar() {
-  calendar = require("Storage").readJSON("android.calendar.json", true) || [];
+//-------------------------------------------------------------------------
+
+function isActive(event) 
+
+{ var timeActive = getTime() - event.timestamp;
+  return timeActive >= 0 && timeActive <= event.durationInSeconds;
+}
+
+function zp(str) {return ("0" + str).substr(-2);}
+//-------------------
+
+function remanie_elem (event) 
+
+{ sortie.id=event.id;
+  if (event.title.length<=10) sortie.titre=event.title;
+  else sortie.titre=event.title.substring(0,12);
+  sortie.moment=event.timestamp;
+  sortie.duree=event.durationInSeconds;
+  sortie.journee=event.allDay;
+  
+  var Rdv = new Date(event.timestamp * 1000);
+  sortie.HH=zp(Rdv.getHours())+":"+zp(Rdv.getMinutes());
+  //console.log(now,Rdv);
+  sortie.nbj=Math.floor(Rdv.getTime()/d_jour)-Math.floor(now.getTime()/d_jour);
+  if (sortie.nbj==0) 
+     {sortie.date="          ";
+      sortie.premier=sortie.HH;}
+  else 
+     {sortie.date=("J+"+sortie.nbj+"      ").substring(0,12);
+      sortie.premier=sortie.date.substring(0,4);}
+  sortie.date=sortie.date+sortie.HH;
+  sortie.premier=(sortie.premier+sortie.titre).substring(0,12);
+}
+//-------------------
+
+function remanie_tout () 
+
+{ var i;
+  courant=[];
+  if (current.length !=0) 
+     {i=0;while(i<current.length)
+               {remanie_elem(current[i]);
+                courant.push(JSON.parse(JSON.stringify(sortie)));
+                i++;}
+     }
+  suivant=[];
+  if (next.length !=0) 
+     {i=0;while(i<next.length)
+               {remanie_elem(next[i]);
+                suivant.push(JSON.parse(JSON.stringify(sortie)));
+                i++;}
+     }
+}
+//----------------
+function updateCalendar() 
+
+{ calendar = require("Storage").readJSON("android.calendar.json", true) || [];
   calendar = calendar.filter(e => isActive(e) || getTime() <= e.timestamp);
   calendar.sort((a, b) => a.timestamp - b.timestamp);
 
   current = calendar.filter(isActive);
   next = calendar.filter(e => !isActive(e));
+  
+  remanie_tout();
 }
-//-----------------------------------------------------------------------------------------
+//-------------------
 
-function isActive(event) {
-  var timeActive = getTime() - event.timestamp;
-  return timeActive >= 0 && timeActive <= event.durationInSeconds;
+function Is_Premier () 
+
+{ligne_premier="";
+  if (courant.length!=0) {ligne_premier=courant[0].premier;return(true);}
+  else if (suivant.length!=0) {ligne_premier=suivant[0].premier;return(true);}
+  else return(false);
 }
 
-function zp(str) {
-  return ("0" + str).substr(-2);
+//-------------------
+function draw_All () 
+
+{ var e={};
+  if (courant.length!=0)
+   { g.setColor(1,0,0);
+     for (i=0;i<courant.length;i++){
+              g.drawString(courant[i].date,x,y);y+=Haut+inter;
+              console.log(courant[i].date);
+              g.drawString(courant[i].titre,x,y);y+=Haut+inter;
+                         if (y > g.getHeight()) break;}
+   }
+  if (suivant.length!=0)
+   { for (i=0;i<suivant.length;i++){
+     if (suivant[i].nbj==0) g.setColor(0,0,1); else g.setColor(0,0,0);
+                         g.drawString(suivant[i].date,x,y);y+=Haut+inter;
+     console.log(suivant[i].date);
+                         g.drawString(suivant[i].titre,x,y);y+=Haut+inter;
+                         if (y > g.getHeight()) break;}
+   }
 }
 
-var chaine;
-var nb = 10;
-//-----------------------------------------------------------------------------------------
-function limit_chaine(chaine, nb) {
-  if (chaine.length != 0) {
-    if (chaine.length >= nb + 1) {
-      chaine = chaine.substring(0, nb);
-    }
-  }
-  return chaine;
-}
-var calen;
-//-----------------------------------------------------------------------------------------
-function timeToNext() {
-  calen = " ";
-  var entete;
-  if (next.length != 0) {
-    calen = limit_chaine(next[0].title, 10);
-    var tempo = new Date(next[0].timestamp * 1000);
-    var offset = 0 - tempo.getTimezoneOffset() / 1440;
-    var days = Math.floor((tempo.getTime() / 1000) / 86400 + offset) - Math.floor(getTime() / 86400 + offset);
-    nb_heures = zp(tempo.getHours());
-    nb_minutes = zp(tempo.getMinutes());
-    if (days == 0) {
-      calen = nb_heures + ":" + nb_minutes + " " + calen;
-    } else {
-      entete = days === 1 ? /*LANG*/ "Demain " : /*LANG*/ "J+" + days + " ";
-      calen = entete + calen;
-    }
-  }
-}
 
 //-----------------------------------------------------------------------------------------
 //          FONCTIONS AFFICHAGES MONTRE
@@ -235,10 +306,9 @@ function aff_principal() {
 
   set_Aff();
   updateCalendar();
-  timeToNext();
-  var offset;
-  offset = 0;
-  if (calen == " ") offset = 24;
+
+  var offset=0;
+  if (Is_Premier ()) offset = 24;
   //
   // --------- HEURE et MINUTE ------------------
   //
@@ -315,34 +385,19 @@ function aff_principal() {
   x = 2;
   y += 32;
   g.setFont("Vector", 22);
-  if (calen != " ") {
+  if (Is_Premier()) 
+  {
     //   Cadre ou pas 
-    if (aff_type[altern].bg_l3 != "No") {
+    if (aff_type[altern].bg_l3 != "No") 
+    {
       color_it(aff_type[altern].bg_l3);
       g.fillRect(0, y, 176, y + 24);
     }
     // couleur texte
     color_it(aff_type[altern].fg_l3);
     g.setFontAlign(-1, 0);
-    g.drawString(calen, x, y);
+    g.drawString(ligne_premier, x, y);
 
-    // Vibrations en amont du RDV
-    if ((nb_heures == 1) && (nb_minutes == 0)) {
-      Bangle.buzz(2000);
-    }
-    if ((nb_heures == 0) && (nb_minutes == 30)) {
-      Bangle.buzz(2000);
-      Tsleep(1000);
-      Bangle.buzz(1000);
-    }
-    if ((nb_heures == 0) && (nb_minutes == 10)) {
-      i = 0;
-      while (i < 4) {
-        Bangle.buzz(500);
-        Tsleep(500);
-        i += 1;
-      }
-    }
   }
 
   //  ----  generiques
@@ -409,85 +464,9 @@ function aff_second() {
 //-------------------------------------------------------
 //                 3/ ECRAN AGENDA 
 
-var inter = 0;
+function aff_agenda() 
 
-function drawEventHeader(event, y) {
-  Haut = 22;
-  g.setFont("Vector", Haut);
-
-  var time = isActive(event) ? new Date() : new Date(event.timestamp * 1000);
-  var timeStr = zp(time.getHours()) + ":" + zp(time.getMinutes());
-
-  y += 2;
-  x = 2;
-
-  if (isActive(event)) {
-    g.drawString(zp(time.getDate()) + "." + require("locale").month(time, 1), x, y);
-  } else {
-    var offset = 0 - time.getTimezoneOffset() / 1440;
-    var days = Math.floor((time.getTime() / 1000) / 86400 + offset) - Math.floor(getTime() / 86400 + offset);
-    if (days > 0) {
-      var daysStr = days === 1 ? /*LANG*/ "Demain" : /*LANG*/ "J+" + days + " ";
-      g.drawString(daysStr, x, y);
-    }
-  }
-  g.drawString(timeStr, 100, y);
-  y += Haut + inter;
-  return y;
-}
-
-function drawEventBody(titre, y) {
-  x = 2;  
-  if (titre != "") {
-    g.drawString(titre, x, y);
-    y += Haut + inter;
-  }
-  return y;
-}
-
-function drawEvent(event, titre, y) {
-  y = drawEventHeader(event, y);
-  y = drawEventBody(titre, y);
-  return y;
-}
-
-var curEventHeight = 0;
-
-function drawCurrentEvents(y) {
-  
-  //g.clearRect(5, y, g.getWidth() - 5, y + curEventHeight);
-  curEventHeight = y;
-
-  if (current.length === 0) {
-    titre = "";g.setColor(1,0,0);console.log("bleu");
-    console.log("premiere ligne");
-  } else {
-    y = drawEventHeader(current[0], y);
-    for (event of current) {
-      console.log("current");
-      titre = limit_chaine(event.title, 10);
-      y = drawEventBody(titre, y);
-    }
-  }
-  curEventHeight = y - curEventHeight;
-  return y;
-}
-
-function drawFutureEvents(y) {
-    //g.setColor(0,0,0);console.log("noir");
-    for (event of next) {
-    console.log("futur");
-    titre = limit_chaine(event.title, 10);
-    y = drawEvent(event, titre, y);
-    g.setColor(0,0,0);
-    if (y > g.getHeight()) break;
-  }
-  return y;
-}
-
-//-----------------------------------------------------------------------
-
-function aff_agenda() {
+{
   ecran = 3;
   set_Aff();
 
@@ -495,11 +474,13 @@ function aff_agenda() {
 
   g.setFontAlign(-1, 0);
   g.clearRect(5, 24, g.getWidth() - 5, g.getHeight());
+
   updateCalendar();
-  y = 33;
-  y = drawCurrentEvents(y);
-  drawFutureEvents(y);
   
+  Haut = 22; g.setFont("Vector", Haut);inter=0;
+  x = 2;y = 33;
+  draw_All (); 
+
   balai();
 }
 //--------------------------------------------------------------------------
@@ -509,8 +490,9 @@ var diap = 0;
 var fic_img = ["mote2", "mote3", "moto2"];
 
 // ---------------
-function aff_momo() {
-  ecran = 4;
+function aff_momo() 
+
+{ ecran = 4;
   console.log(" Diaporama :", ecran, diap);
   clearTimeout(tp_momo);
   if (diap >= fic_img.length) {diap = 0;lit_img = 0;aff_principal();} //fini
@@ -524,9 +506,9 @@ function aff_momo() {
 //  ----------------   Fonctions Touch screen 
 var SD=""; var LR=0;var UD=0; var balai_set=0;
 
-function balai() {
+function balai() 
 
-  if (balai_set==1) return;
+{ if (balai_set==1) return;
   balai_set=1;  print(">> ----- suis la");
   Bangle.setUI("clock");
   Bangle.on('tap', function(data) {
@@ -535,9 +517,9 @@ function balai() {
   });
   SD = "";LR=0;UD=0; 
   Bangle.on('swipe', function(LR, UD) {
-    if (LR == -1) {SD = "G";} else {if (LR == 1) {SD = "D";} 
-                                    else {if (UD == -1) {SD = SD + "H";} 
-                                          else {if (UD == 1) {SD = SD + "B";}   }
+    if (LR == -1) {SD ="G";} else {if (LR == 1) {SD ="D";} 
+                                    else {if (UD == -1) {SD ="H";} 
+                                          else {if (UD == 1) {SD ="B";}   }
                                           }
                                     }
     print(SD);
@@ -552,24 +534,24 @@ function balai() {
 //-----------------------------------------------
 var Inter_page;var tp_momo; var Momo_regular;
 
-function aiguillage() {
+function aiguillage() 
+{
   console.log("Boutton/swipe");
-  // Pour arreter Tsleep 
-  boutton = 1;
+  boutton = 1;// Pour arreter Tsleep 
   setWatch(aiguillage, BTN1, {edge: "rising",debounce: 30,repeat: true });
   
   if (tp_momo) clearTimeout(tp_momo);
   if (Inter_page) clearTimeout(Inter_page);
   Inter_page = setInterval(aff_principal, rafraichi * 1000);
 
-  var proch=ecran;
-  if (SD=="D") proch=ecran+1;
-  if (SD=="G") proch=ecran-1;
+  var prochain=ecran;
+  if (SD=="D") prochain=ecran+1;
+  if (SD=="G") prochain=ecran-1;
 
-  if (proch <=1 || proch > 4) {diap = 0;lit_img = 0;aff_principal();}
-  if (proch == 2) aff_second();
-  if (proch == 3) aff_agenda();
-  if (proch == 4) {tp_momo = setTimeout(aff_momo, 7000);diap = 0;
+  if (prochain <=1 || prochain > 4) {diap = 0;lit_img = 0;aff_principal();}
+  if (prochain == 2) aff_second();
+  if (prochain == 3) aff_agenda();
+  if (prochain== 4) {tp_momo = setTimeout(aff_momo, 7000);diap = 0;
                    Bangle.setUI("clock");aff_momo();}
 }
 
