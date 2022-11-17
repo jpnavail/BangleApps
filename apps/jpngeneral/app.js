@@ -207,7 +207,7 @@ function remanie_elem (event)
 
 { sortie.id=event.id;
   if (event.title.length<=10) sortie.titre=event.title;
-  else sortie.titre=event.title.substring(0,12);
+  else sortie.titre=event.title.substring(0,14);
   sortie.moment=event.timestamp;
   sortie.duree=event.durationInSeconds;
   sortie.journee=event.allDay;
@@ -223,7 +223,7 @@ function remanie_elem (event)
      {sortie.date=("J+"+sortie.nbj+"      ").substring(0,12);
       sortie.premier=sortie.date.substring(0,4);}
   sortie.date=sortie.date+sortie.HH;
-  sortie.premier=(sortie.premier+sortie.titre).substring(0,12);
+  sortie.premier=(sortie.premier+" "+sortie.titre).substring(0,14);
 }
 //-------------------
 
@@ -308,7 +308,7 @@ function aff_principal() {
   updateCalendar();
 
   var offset=0;
-  if (Is_Premier ()) offset = 24;
+  if (!Is_Premier ()) offset = 24;
   //
   // --------- HEURE et MINUTE ------------------
   //
