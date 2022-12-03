@@ -120,8 +120,6 @@ function D_ecran(img,x,y)
 
 {g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y);Bangle.drawWidgets();console.log("xx");}
 
-function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);updateCalendar();}
-
 //-----------------------------------------------------
 //      Memoire = pack 
 // ={ free: 11908, usage: 92, total: 12000, history: 4, gc: 2, 
@@ -498,7 +496,8 @@ function aff_momo()
   if (diap >= fic_img.length) {diap = 0;lit_img = 0;aff_principal();} //fini
   else {img = lit_fic(diap);D_ecran(img, 0, 24);diap += 1;tp_momo = setTimeout(aff_momo, 7000);balai();}
 }
-
+//-----------------  MOMO ----------------------------------------------
+function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);updateCalendar();}
 //-----------------------------------------------------------------------
 //                   AIGUILLAGE
 //--------------------                -----------------------------------
