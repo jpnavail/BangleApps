@@ -120,7 +120,7 @@ function D_ecran(img,x,y)
 
 {g.clearRect(0,0,176,176);g.drawImage(atob(img), x, y);Bangle.drawWidgets();console.log("xx");}
 
-function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);}
+function aff_momoregular() {console.log("regular");D_ecran(img,0,24,1);updateCalendar();}
 
 //-----------------------------------------------------
 //      Memoire = pack 
