@@ -192,15 +192,6 @@ function suite_press(data)
 
 //-------------------------------------------------------------------------
 
-function isActive(event) 
-
-{ var timeActive = getTime() - event.timestamp;
-  return timeActive >= 0 && timeActive <= event.durationInSeconds;
-}
-
-function zp(str) {return ("0" + str).substr(-2);}
-//-------------------
-
 function remanie_elem (event) 
 
 { sortie.id=event.id;
@@ -245,6 +236,15 @@ function remanie_tout ()
      }
 }
 //----------------
+function zp(str) {return ("0" + str).substr(-2);}
+
+function isActive(event) 
+
+{ var timeActive = getTime() - event.timestamp;
+  return timeActive >= 0 && timeActive <= event.durationInSeconds;
+}
+//-------------------
+
 function updateCalendar() 
 
 { calendar = require("Storage").readJSON("android.calendar.json", true) || [];
@@ -411,13 +411,13 @@ function aff_principal() {
   balai();
 }
 //-------------------------------------------------------
-//               PAGE DES DONNEES-
+//        2/       PAGE DES DONNEES-
 
 function aff_second() {
   ecran = 2;
   set_Aff();
-  Haut = 22;
-  var inc = 0;
+  Haut = 24;
+  var inc = 5;
   console.log("affichage second");
   g.setFont("Vector", Haut);
   g.setFontAlign(-1, 0);
@@ -447,14 +447,14 @@ function aff_second() {
   y += Haut + inc;
 
   //imp_util,mem_util,anc_util=
-  ressource();
-  var i = 0;
-  while (i != 2) {
-    console.log(i, imp_util[i]);
-    g.drawString(imp_util[i].substring(0, 14), x, y);
-    y += Haut + inc;
-    i += 1;
-  }
+  //ressource();
+  //var i = 0;
+  //while (i != 2) {
+    //console.log(i, imp_util[i]);
+    //g.drawString(imp_util[i].substring(0, 14), x, y);
+    //y += Haut + inc;
+    //i += 1;
+  //}
 
   balai();
 }
