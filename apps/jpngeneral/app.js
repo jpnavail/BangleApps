@@ -211,7 +211,7 @@ function remanie_elem (event)
       sortie.premier=sortie.HH;}
   else 
      {sortie.date=("J+"+sortie.nbj+"      ").substring(0,12);
-      sortie.premier=sortie.date.substring(0,4);}
+      sortie.premier=sortie.date.substring(0,3);}
   sortie.date=sortie.date+sortie.HH;
   sortie.premier=(sortie.premier+" "+sortie.titre).substring(0,14);
 }
