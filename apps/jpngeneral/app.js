@@ -211,9 +211,10 @@ function remanie_elem (event)
   sortie.journee=event.allDay;
   
   var Rdv = new Date(event.timestamp * 1000);
+  var Maintenant = Date.now();
   sortie.HH=zp(Rdv.getHours())+":"+zp(Rdv.getMinutes());
   //console.log(now,Rdv);
-  sortie.nbj=Math.floor(Rdv.getTime()/d_jour)-Math.floor(now.getTime()/d_jour);
+  sortie.nbj=Math.floor(Rdv.getTime()/d_jour)-Math.floor(Maintenant.getTime()/d_jour);
   if (sortie.nbj==0) 
      {sortie.date="          ";
       sortie.premier=sortie.HH;}
