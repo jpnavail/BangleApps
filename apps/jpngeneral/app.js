@@ -41,7 +41,7 @@ var couleur=[
 //  xx : 1 HH:MM, 2/ Date  3 :Ligne =>  bg:rectange/No , couleur fg : coul texte
 
 aff_type=[ 
-  { "bg":"colioure","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Rouge","bg_l3":"No","fg_l3":"Blanc"},
+  { "bg":"colioure","bg_l1":"No","fg_l1":"Bleu_fonce","bg_l2":"No","fg_l2":"Jaune","bg_l3":"No","fg_l3":"Blanc"},
   { "bg":"fd_bg_cal","bg_l1":"Rouge","fg_l1":"Blanc","bg_l2":"No","fg_l2":"Noir","bg_l3":"No","fg_l3":"Noir"},
   { "bg":"terre","bg_l1":"No","fg_l1":"Jaune","bg_l2":"No","fg_l2":"Blanc","bg_l3":"No","fg_l3":"Blanc"},
   { "bg":"fd_bg_mult","bg_l1":"No","fg_l1":"Noir","bg_l2":"Noir","fg_l2":"Jaune","bg_l3":"Noir","fg_l3":"Blanc"},
